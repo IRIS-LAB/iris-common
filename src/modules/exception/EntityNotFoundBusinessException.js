@@ -8,4 +8,4 @@ class EntityNotFoundBusinessException extends BusinessException {
   }
 }
 
-module.exports.EntityNotFoundBusinessException = EntityNotFoundBusinessExceptions
+module.exports.EntityNotFoundBusinessException = EntityNotFoundBusinessException
