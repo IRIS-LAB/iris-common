@@ -5,6 +5,7 @@ export class ErrorDO {
     this.errorLabel = errorLabel
   }
 
+  /*
   get errorField() {
     return this.errorField
   }
@@ -28,8 +29,8 @@ export class ErrorDO {
   set errorLabel(errorLabel) {
     this.errorLabel = errorLabel
   }
-
+*/
 
 }
 
-module.exports.ErrorDO = ErrorDO
+//module.exports.ErrorDO = ErrorDO
