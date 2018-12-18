@@ -1,10 +1,11 @@
 class BusinessException extends Error {
-  constructor(code, message) {
-    super(message)
-    this.code = code
+  constructor(errors) {
+    super()
+    this.errors = errors
   }
-  toString() {
-    return '(' + this.code + ', ' + this.message + ')'
+
+  get errors() {
+    return this.errors
   }
 }
 

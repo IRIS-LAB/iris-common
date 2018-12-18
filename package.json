@@ -1,21 +1,21 @@
 {
-  "name": "hivent-backend-utils",
-  "version": "1.0.1",
-  "description": "A common NodeJs module",
+  "name": "iris-elements",
+  "version": "1.0.2",
+  "description": "A common js module",
   "main": "dist/index.js",
   "scripts": {
     "build": "rollup --config"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IRIS-LAB/hivent-backend-utils.git"
+    "url": "git+https://github.com/IRIS-LAB/iris-elements.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/IRIS-LAB/hivent-backend-utils/issues"
+    "url": "https://github.com/IRIS-LAB/iris-elements/issues"
   },
-  "homepage": "https://github.com/IRIS-LAB/hivent-backend-utils#readme",
+  "homepage": "https://github.com/IRIS-LAB/iris-elements#readme",
   "devDependencies": {
     "rollup": "^0.67.4",
     "rollup-plugin-minify-es": "^1.1.1",
