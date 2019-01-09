@@ -1,6 +1,6 @@
 {
   "name": "iris-common",
-  "version": "1.0.3",
+  "version": "1.0.3-0",
   "description": "A common js module",
   "main": "dist/index.js",
   "files": ["dist/"],
