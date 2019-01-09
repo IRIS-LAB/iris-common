@@ -1,6 +1,6 @@
-# hivent-backend-utils
+# iris-common
 
-> Backend Utils for Hivent
+> Backend and Frontend Utils for Iris
 
 ## Build Setup
 
@@ -25,10 +25,10 @@ npm test
 
 ```bash
 # install dependency
-npm i hivent-backend-utils --save
+npm i iris-common --save
 ```
 
 ```js
-import { BusinessException } from 'hivent-backend-utils'
+import { BusinessException } from 'iris-common'
 const test = new BusinessException('code', 'message')
 ```
