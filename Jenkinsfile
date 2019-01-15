@@ -1,13 +1,8 @@
 #!groovy
-
-@Library('gie@develop') _
-
+ 
+@Library('gie') _
+ 
 continuousIntegration(
-    contextRoot: 'iris-common',
-    builder: 'npm',
-    authProvider: 'none',
-    skipIntegrationTests: false,
-    targetedMiddleware: 'APACHE',
-    deployer: 'docker_ee',
-    performRelease: true
+  builder: 'npm',
+  deployer: 'none'
 )

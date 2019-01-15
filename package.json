@@ -1,25 +1,27 @@
 {
-  "name": "iris-common",
-  "version": "1.0.3-0",
-  "description": "A common js module",
-  "main": "dist/index.js",
-  "files": ["dist/"],
-  "scripts": {
-    "build": "rollup --config"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/IRIS-LAB/iris-common.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/IRIS-LAB/iris-common/issues"
-  },
-  "homepage": "https://github.com/IRIS-LAB/iris-common#readme",
-  "devDependencies": {
-    "rollup": "^0.67.4",
-    "rollup-plugin-minify-es": "^1.1.1",
-    "rollup-plugin-multi-entry": "^2.0.2"
-  }
+	"name": "iris-common",
+	"version": "1.0.3-1",
+	"description": "A common js module",
+	"main": "dist/index.js",
+	"files": [
+		"dist/"
+	],
+	"scripts": {
+		"build": "rollup --config"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/IRIS-LAB/iris-common.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/IRIS-LAB/iris-common/issues"
+	},
+	"homepage": "https://github.com/IRIS-LAB/iris-common#readme",
+	"devDependencies": {
+		"rollup": "^0.67.4",
+		"rollup-plugin-minify-es": "^1.1.1",
+		"rollup-plugin-multi-entry": "^2.0.2"
+	}
 }
