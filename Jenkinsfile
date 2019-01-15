@@ -3,7 +3,7 @@
 @Library('gie@develop') _
 
 continuousIntegration(
-    contextRoot: 'iris-ui-elements',
+    contextRoot: 'iris-common',
     builder: 'npm',
     authProvider: 'none',
     skipIntegrationTests: false,
