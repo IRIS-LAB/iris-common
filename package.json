@@ -1,5 +1,5 @@
 {
-	"name": "iris-common",
+	"name": "@ugieiris/iris-common",
 	"version": "1.0.4-0",
 	"description": "A common js module",
 	"main": "dist/index.js",
