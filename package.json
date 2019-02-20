@@ -1,27 +1,39 @@
 {
-	"name": "@ugieiris/iris-common",
-	"version": "1.0.5-0",
-	"description": "A common js module",
-	"main": "dist/index.js",
-	"files": [
-		"dist/"
-	],
-	"scripts": {
-		"build": "rollup --config"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/IRIS-LAB/iris-common.git"
-	},
-	"author": "",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/IRIS-LAB/iris-common/issues"
-	},
-	"homepage": "https://github.com/IRIS-LAB/iris-common#readme",
-	"devDependencies": {
-		"rollup": "^0.67.4",
-		"rollup-plugin-minify-es": "^1.1.1",
-		"rollup-plugin-multi-entry": "^2.0.2"
-	}
+  "name": "@ugieiris/iris-common",
+  "version": "1.0.5-0",
+  "description": "A common js module",
+  "main": "dist/index.js",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "rollup --config",
+    "unit": "jest spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IRIS-LAB/iris-common.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IRIS-LAB/iris-common/issues"
+  },
+  "homepage": "https://github.com/IRIS-LAB/iris-common#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.3.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-root-import": "^6.1.0",
+    "jest": "^23.6.0",
+    "rollup": "^0.67.4",
+    "rollup-plugin-minify-es": "^1.1.1",
+    "rollup-plugin-multi-entry": "^2.0.2"
+  }
 }

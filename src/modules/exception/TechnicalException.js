@@ -1,13 +1,9 @@
 export class TechnicalException extends Error {
-  constructor(errors) {
+  constructor(errors, causedException) {
     super()
     this.errors = errors
+    if (causedException) {
+      this.stack += `\nCaused by : ${causedException.stack}`
+    }
   }
-
-  /*
-  get errors() {
-    return this.errors
-  }*/
 }
-
-// module.exports.TechnicalException = TechnicalException
