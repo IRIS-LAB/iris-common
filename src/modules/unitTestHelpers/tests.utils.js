@@ -1,14 +1,18 @@
-import { set as _set } from 'lodash'
+import { set as _set } from "lodash";
 
 /**
- * function calling an async function with arguments and checking than its result is correct
+ * Function calling an async function with arguments and checking than its result is correct
  * @param {*} functionToCall
  * @param {*} expectedResult
  * @param  {...any} functionArgs
  */
-export async function callFunctionAndCheckResult(functionToCall, expectedResult, ...functionArgs) {
-  let result = await functionToCall.apply(null, functionArgs)
-  expect(result).toEqual(expectedResult)
+export async function callFunctionAndCheckResult(
+  functionToCall,
+  expectedResult,
+  ...functionArgs
+) {
+  let result = await functionToCall.apply(null, functionArgs);
+  expect(result).toEqual(expectedResult);
 }
 /**
  * Function checking if a given function has been called with given params as arguments
@@ -16,8 +20,8 @@ export async function callFunctionAndCheckResult(functionToCall, expectedResult,
  * @param  {...any} functionArgs
  */
 export function checkFunctionCall(functionToHaveBeenCalled, ...functionArgs) {
-  expect(functionToHaveBeenCalled).toHaveBeenCalledTimes(1)
-  expect(functionToHaveBeenCalled).toHaveBeenCalledWith(...functionArgs)
+  expect(functionToHaveBeenCalled).toHaveBeenCalledTimes(1);
+  expect(functionToHaveBeenCalled).toHaveBeenCalledWith(...functionArgs);
 }
 
 /**
@@ -27,39 +31,44 @@ export function checkFunctionCall(functionToHaveBeenCalled, ...functionArgs) {
  * @param {function} functionToTest, function to call
  * @param  {...any} functionArgs, arguments of the function to call
  */
-export async function checkException(exceptionClass, errorCodes, functionToTest, ...functionArgs) {
+export async function checkException(
+  exceptionClass,
+  errorCodes,
+  functionToTest,
+  ...functionArgs
+) {
   // WHEN
-  let result
+  let result;
   try {
-    result = await functionToTest.apply(null, functionArgs)
+    result = await functionToTest.apply(null, functionArgs);
   } catch (e) {
     // checking exception throwed within async function
-    result = e
+    result = e;
   }
   // THEN
   // Check exception class
-  expect(result).toBeInstanceOf(exceptionClass)
+  expect(result).toBeInstanceOf(exceptionClass);
   // Create object with errorCodes as keys and errorLabels as values
-  let errorsKeys = {}
+  let errorsKeys = {};
   result.errors.forEach(obj => {
-    errorsKeys[obj.codeErreur] = obj.libelleErreur
-  })
+    errorsKeys[obj.codeErreur] = obj.libelleErreur;
+  });
   // Check that each given errorCode is present in the result
   errorCodes.forEach(code => {
-    expect(errorsKeys).toHaveProperty([code])
-  })
+    expect(errorsKeys).toHaveProperty([code]);
+  });
   // Check that there is no other errorCode
-  expect(result.errors).toHaveLength(errorCodes.length)
+  expect(result.errors).toHaveLength(errorCodes.length);
 }
 
 /**
- * function creating an object of mocked functions (for ex., used to mock models or dao in node projects)
+ * Function creating an object of mocked functions (for ex., used to mock models or dao in node projects)
  * @param {*} functionsToMock (array of objects like { path: 'function.path.inFinalObject', value: returnedValueOfTheMock })
  */
 export function initMocks(functionsToMock) {
-  let mocksObject = {}
+  let mocksObject = {};
   functionsToMock.forEach(functionToMock => {
-    _set(mocksObject, functionToMock.path, jest.fn(() => functionToMock.value))
-  })
-  return mocksObject
+    _set(mocksObject, functionToMock.path, jest.fn(() => functionToMock.value));
+  });
+  return mocksObject;
 }
