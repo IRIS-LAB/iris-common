@@ -25,14 +25,14 @@ npm test
 
 ```bash
 # install dependency
-npm i iris-common --save
+npm i @ugieiris/iris-common --save
 ```
 
 ## Objects
 
 Commonly used classes :
 
-- ErreurDO: error structure with 3 fields: `champErreur`, `codeErreur`, `libelleErreur`
+- ErreurDO: error structure with 3 fields: `champErreur`, `codeErreur`, `libelleErreur`.
 
 ```js
 import { ErreurDO } from "@ugieiris/iris-common";
@@ -49,39 +49,30 @@ Classes for exceptions that all have the property `errors`.
 - TechnicalException
 
 ```js
-import {
-  BusinessException,
-  EntityNotFoundBusinessException,
-  TechnicalException
-} from "@ugieiris/iris-common";
+import { BusinessException, EntityNotFoundBusinessException, TechnicalException } from "@ugieiris/iris-common";
 
 const testBusinessException = new BusinessException(errorsArray);
-const testEntityNotFoundBusinessException = new EntityNotFoundBusinessException(
-  errorObject
-);
-const testTechnicalException = new TechnicalException(
-  errorsArray,
-  causedException
-);
+const testEntityNotFoundBusinessException = new EntityNotFoundBusinessException(errorObject);
+const testTechnicalException = new TechnicalException(errorsArray, causedException);
 ```
 
 ## Unit Test Helpers
 
 Severals utils functions for unit tests are available :
 
-- callFunctionAndCheckResult: function calling an async function with arguments and checking than its result is correct
-  `async function callFunctionAndCheckResult(functionToCall, expectedResult, ...functionArgs)`
+- **callFunctionAndCheckResult**: function calling an async function with arguments and checking than its result is correct.  
+*`async function callFunctionAndCheckResult(functionToCall, expectedResult, ...functionArgs)`*
 
-- checkFunctionCall: function checking if a given function has been called with given params as arguments
-  `function checkFunctionCall(functionToHaveBeenCalled, ...functionArgs)`
+- **checkFunctionCall**: function checking if a given function has been called exactly one time, with given params as arguments.  
+*`function checkFunctionCall(functionToHaveBeenCalled, ...functionArgs)`*
 
-- checkException: function checking that an exception is thrown when an async function is called.
-  Its arguments are the constructor of the thrown exception, an exhaustive array of the error codes thrown in exception, the function to call, and the arguments of the function to call.
-  `async function checkException(exceptionClass, errorCodes, functionToTest, ...functionArgs)`
+- **checkException**: function checking that an exception is thrown when an async function is called.  
+Its arguments are the constructor of the thrown exception, an exhaustive array of the error codes thrown in exception, the function to call, and the arguments of the function to call.  
+*`async function checkException(exceptionClass, errorCodes, functionToTest, ...functionArgs)`*
 
-- initMocks: function creating an object of mocked functions (for ex., used to mock models or dao in node projects).
-  Its argument should be an array of objects like `{ path: 'function.path.inFinalObject', value: returnedValueOfTheMock }`.
-  `function initMocks(functionsToMock)`
+- **initMocks**: function creating an object of mocked functions (for ex., used to mock models or dao in node projects).  
+Its argument should be an array of objects like `{ path: 'function.path.inFinalObject', value: returnedValueOfTheMock }`.  
+*`function initMocks(functionsToMock)`*
 
 ```js
 import { checkFunctionCall } from '@ugieiris/iris-common'
