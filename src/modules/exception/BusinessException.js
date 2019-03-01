@@ -3,12 +3,4 @@ export class BusinessException extends Error {
     super()
     this.errors = errors
   }
-
-  /*
-  get errors() {
-    return this.errors
-  }
-  */
 }
-
-//module.exports.BusinessException = BusinessException
