@@ -25,7 +25,7 @@ npm test
 
 ```bash
 # install dependency
-npm i @ugieiris/iris-common --save
+npm i @u-iris/iris-common --save
 ```
 
 ## Objects
@@ -35,9 +35,9 @@ Commonly used classes :
 - ErreurDO: error structure with 3 fields: `champErreur`, `codeErreur`, `libelleErreur`.
 
 ```js
-import { ErreurDO } from "@ugieiris/iris-common";
+import { ErreurDO } from '@u-iris/iris-common'
 
-const error = ErreurDO("champErreur", "codeErreur", "libelleErreur");
+const error = ErreurDO('champErreur', 'codeErreur', 'libelleErreur')
 ```
 
 ## Exceptions
@@ -49,11 +49,20 @@ Classes for exceptions that all have the property `errors`.
 - TechnicalException
 
 ```js
-import { BusinessException, EntityNotFoundBusinessException, TechnicalException } from "@ugieiris/iris-common";
+import {
+  BusinessException,
+  EntityNotFoundBusinessException,
+  TechnicalException
+} from '@u-iris/iris-common'
 
-const testBusinessException = new BusinessException(errorsArray);
-const testEntityNotFoundBusinessException = new EntityNotFoundBusinessException(errorObject);
-const testTechnicalException = new TechnicalException(errorsArray, causedException);
+const testBusinessException = new BusinessException(errorsArray)
+const testEntityNotFoundBusinessException = new EntityNotFoundBusinessException(
+  errorObject
+)
+const testTechnicalException = new TechnicalException(
+  errorsArray,
+  causedException
+)
 ```
 
 ## Unit Test Helpers
@@ -61,21 +70,21 @@ const testTechnicalException = new TechnicalException(errorsArray, causedExcepti
 Severals utils functions for unit tests are available :
 
 - **callFunctionAndCheckResult**: function calling an async function with arguments and checking than its result is correct.  
-*`async function callFunctionAndCheckResult(functionToCall, expectedResult, ...functionArgs)`*
+  _`async function callFunctionAndCheckResult(functionToCall, expectedResult, ...functionArgs)`_
 
 - **checkFunctionCall**: function checking if a given function has been called exactly one time, with given params as arguments.  
-*`function checkFunctionCall(functionToHaveBeenCalled, ...functionArgs)`*
+  _`function checkFunctionCall(functionToHaveBeenCalled, ...functionArgs)`_
 
 - **checkException**: function checking that an exception is thrown when an async function is called.  
-Its arguments are the constructor of the thrown exception, an exhaustive array of the error codes thrown in exception, the function to call, and the arguments of the function to call.  
-*`async function checkException(exceptionClass, errorCodes, functionToTest, ...functionArgs)`*
+  Its arguments are the constructor of the thrown exception, an exhaustive array of the error codes thrown in exception, the function to call, and the arguments of the function to call.  
+  _`async function checkException(exceptionClass, errorCodes, functionToTest, ...functionArgs)`_
 
 - **initMocks**: function creating an object of mocked functions (for ex., used to mock models or dao in node projects).  
-Its argument should be an array of objects like `{ path: 'function.path.inFinalObject', value: returnedValueOfTheMock }`.  
-*`function initMocks(functionsToMock)`*
+  Its argument should be an array of objects like `{ path: 'function.path.inFinalObject', value: returnedValueOfTheMock }`.  
+  _`function initMocks(functionsToMock)`_
 
 ```js
-import { checkFunctionCall } from '@ugieiris/iris-common'
+import { checkFunctionCall } from '@u-iris/iris-common'
 import { functionOne } from 'moduleToTest' // function taking two parameters
 describe('functionOne', () => {
     it('should call functionTwo with arguments "toto" and "test", and return "tototest", when called with the parameter "toto" and "test"', () => {
@@ -91,7 +100,15 @@ describe('functionOne', () => {
 Validator functions
 
 ```js
-import { checkMail } from "@ugieiris/iris-common";
+import { checkMail } from '@u-iris/iris-common'
 
-const isMailValid = checkMail("mail.test@systeme-u.fr");
+const isMailValid = checkMail('mail.test@systeme-u.fr')
+```
+
+**checkJoi**: function to check an object with a Joi Model. Throw business exception with ErreurDO if check failed.
+
+```js
+import { checkJoi } from '@u-iris/iris-common'
+
+const isMailValid = checkJoi(ModelJoi, objectToValidate)
 ```
