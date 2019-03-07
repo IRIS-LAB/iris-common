@@ -2,6 +2,8 @@
 
 > Backend and Frontend Utils for Iris
 
+See the change log at [link](release-notes.md).
+
 ## Build Setup
 
 ```bash
@@ -105,10 +107,10 @@ import { checkMail } from '@u-iris/iris-common'
 const isMailValid = checkMail('mail.test@systeme-u.fr')
 ```
 
-**checkJoi**: function to check an object with a Joi Model. Throw business exception with ErreurDO if check failed.
+**check**: function to check an object with a Joi Model. Throw business exception with ErreurDO if check failed.
 
 ```js
-import { checkJoi } from '@u-iris/iris-common'
+import { check } from '@u-iris/iris-common'
 
 const isMailValid = checkJoi(ModelJoi, objectToValidate)
 ```
