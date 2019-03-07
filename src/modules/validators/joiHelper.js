@@ -8,7 +8,7 @@ import { ErreurDO } from '../objects/ErreurDO'
  * @param {*} object to validate
  * @return a valid object
  */
-export default function check(model, object) {
+export const check = (model, object) => {
   const { error, value } = Joi.validate(object, model, { abortEarly: false })
   if (error) {
     const errors = error.details.map(({ message, context, type }) => {
