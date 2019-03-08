@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import { validate } from 'joi'
 import { BusinessException } from '../exception/BusinessException'
 import { ErreurDO } from '../objects/ErreurDO'
 
@@ -9,7 +9,7 @@ import { ErreurDO } from '../objects/ErreurDO'
  * @return a valid object
  */
 export const check = (model, object) => {
-  const { error, value } = Joi.validate(object, model, { abortEarly: false })
+  const { error, value } = validate(object, model, { abortEarly: false })
   if (error) {
     const errors = error.details.map(({ message, context, type }) => {
       const field = context.key

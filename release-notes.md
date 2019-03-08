@@ -1,5 +1,5 @@
-# 1.0.8
+# 1.0.10
 
-- [X] Add check Joi function
-- [X] Update version
-- [X] Add release notes
+- [x] Add check Joi function
+- [x] Update version
+- [x] Add release notes
