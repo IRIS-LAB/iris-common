@@ -4,5 +4,6 @@
  
 continuousIntegration(
   builder: 'npm',
-  deployer: 'none'
+  deployer: 'none',
+  forceEligibilityForRelease: true
 )

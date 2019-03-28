@@ -3,6 +3,7 @@
 	"version": "1.0.11-1",
 	"description": "A common js module",
 	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"files": [
 		"dist/"
 	],
@@ -38,6 +39,7 @@
 	},
 	"dependencies": {
 		"joi": "^14.3.1",
-		"lodash": "^4.17.11"
+		"lodash": "^4.17.11",
+		"rollup-plugin-copy": "^0.2.3"
 	}
 }

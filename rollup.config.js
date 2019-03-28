@@ -1,27 +1,19 @@
-import multiEntry from 'rollup-plugin-multi-entry'
-import minify from 'rollup-plugin-minify-es'
+import multiEntry from 'rollup-plugin-multi-entry';
+import minify from 'rollup-plugin-minify-es';
+import copy from 'rollup-plugin-copy';
 //import fs from 'fs'
 
-const rootDirectory = 'src/modules'
-/*
-const configs = fs.readdirSync(rootDirectory).map(inputDirectory => ({
-  input: `${rootDirectory}/${inputDirectory}/*.js`,
-  output: {
-    file: `dist/${inputDirectory}.js`,
-    format: 'cjs'
-  },
-  plugins: [multiEntry(), minify()]
-}))
-*/
-const configs = [
-  {
-    input: `${rootDirectory}/**/*.js`,
-    output: {
-      file: `dist/index.js`,
-      format: 'cjs'
-    },
-    plugins: [multiEntry(), minify()]
-  }
-]
+const rootDirectory = 'src/modules';
 
-module.exports = configs
+const configs = [
+	{
+		input: `${rootDirectory}/**/*.js`,
+		output: {
+			file: `dist/index.js`,
+			format: 'cjs'
+		},
+		plugins: [multiEntry(), minify(), copy({ 'types/index.d.ts': 'dist/index.d.ts' })]
+	}
+];
+
+module.exports = configs;
