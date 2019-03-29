@@ -8,7 +8,7 @@ declare class ErreurDO {
 }
 
 declare class SecurityException extends Error {
-	constructor(error: ErreurDO);
+	constructor(errors: Array<ErreurDO>);
 }
 
 declare class BusinessException extends Error {
