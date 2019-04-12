@@ -8,17 +8,21 @@ declare class ErreurDO {
 }
 
 declare class SecurityException extends Error {
-	constructor(errors: Array<ErreurDO>);
+	errors: ErreurDO[];
+	constructor(errors: ErreurDO[]);
 }
 
 declare class BusinessException extends Error {
-	constructor(errors: Array<ErreurDO>);
+	errors: ErreurDO[];
+	constructor(errors: ErreurDO[]);
 }
 
 declare class TechnicalException extends Error {
-	constructor(errors: Array<ErreurDO>, causedException: Error);
+	errors: ErreurDO[];
+	constructor(errors: ErreurDO[], causedException: Error);
 }
 
 declare class EntityNotFoundBusinessException extends Error {
+	errors: ErreurDO[];
 	constructor(error: ErreurDO);
 }
