@@ -1,19 +1,39 @@
-import multiEntry from 'rollup-plugin-multi-entry';
-import minify from 'rollup-plugin-minify-es';
-import copy from 'rollup-plugin-copy';
-//import fs from 'fs'
+import importAlias from 'rollup-plugin-import-alias'
+import typescript from 'rollup-plugin-typescript2'
 
-const rootDirectory = 'src/modules';
+import pkg from './package.json'
+
+const rootDirectory = 'src'
 
 const configs = [
-	{
-		input: `${rootDirectory}/**/*.js`,
-		output: {
-			file: `dist/index.js`,
-			format: 'cjs'
-		},
-		plugins: [multiEntry(), minify(), copy({ 'types/index.d.ts': 'dist/index.d.ts' })]
-	}
-];
+  {
+    input: `${rootDirectory}/index.ts`,
+    output: [
+      {
+        file: pkg.main,
+        format: 'cjs',
+      },
+      {
+        file: pkg.module,
+        format: 'es'
+      }
+    ],
+    plugins: [
+      typescript({
+        tsconfig: 'tsconfig.build.json',
+        typescript: require('ttypescript'),
+        tsconfigOverride: {
+          compilerOptions: { declaration: true }
+        }
+      }),
+      importAlias({
+        Paths: {
+          '~': './'
+        },
+        Extensions: ['js', 'ts']
+      }),
+    ],
+  },
+]
 
-module.exports = configs;
+module.exports = configs

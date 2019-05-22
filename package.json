@@ -1,45 +1,62 @@
 {
-	"name": "@u-iris/iris-common",
-	"version": "1.0.12-0",
-	"description": "A common js module",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"files": [
-		"dist/"
-	],
-	"scripts": {
-		"build": "rollup --config",
-		"unit": "jest spec"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/IRIS-LAB/iris-common.git"
-	},
-	"author": "",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/IRIS-LAB/iris-common/issues"
-	},
-	"homepage": "https://github.com/IRIS-LAB/iris-common#readme",
-	"devDependencies": {
-		"@babel/cli": "^7.2.3",
-		"@babel/core": "^7.3.3",
-		"@babel/node": "^7.0.0",
-		"@babel/plugin-transform-runtime": "^7.1.0",
-		"@babel/polyfill": "^7.0.0",
-		"@babel/preset-env": "^7.3.0",
-		"babel-core": "^7.0.0-bridge.0",
-		"babel-jest": "^23.6.0",
-		"babel-loader": "^8.0.4",
-		"babel-plugin-root-import": "^6.1.0",
-		"jest": "^23.6.0",
-		"rollup": "^0.67.4",
-		"rollup-plugin-minify-es": "^1.1.1",
-		"rollup-plugin-multi-entry": "^2.0.2"
-	},
-	"dependencies": {
-		"joi": "^14.3.1",
-		"lodash": "^4.17.11",
-		"rollup-plugin-copy": "^0.2.3"
-	}
+  "name": "@u-iris/iris-common",
+  "version": "2.0.0-0",
+  "description": "Common JS module for IRIS",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run clean && rollup --config",
+    "clean": "rm -rf ./dist && mkdir dist",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "test": "jest",
+    "unit": "npm run test:unit",
+    "test:unit": "jest spec/unit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IRIS-LAB/iris-common.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IRIS-LAB/iris-common/issues"
+  },
+  "homepage": "https://github.com/IRIS-LAB/iris-common#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.3.0",
+    "@types/jest": "^24.0.13",
+    "@types/joi": "^14.3.3",
+    "@types/lodash": "^4.14.129",
+    "@types/node": "^12.0.2",
+    "@zerollup/ts-transform-paths": "^1.7.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-root-import": "^6.1.0",
+    "jest": "^24.8.0",
+    "jest-html-reporter": "^2.5.0",
+    "rollup": "^1.12.3",
+    "rollup-plugin-import-alias": "^1.0.7",
+    "rollup-plugin-typescript2": "^0.21.1",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
+    "ttypescript": "^1.5.6",
+    "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "joi": "^14.3.1",
+    "lodash": "^4.17.11",
+    "reflect-metadata": "^0.1.13",
+    "tsdv-joi": "0.0.12"
+  }
 }
