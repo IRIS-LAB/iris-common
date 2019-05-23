@@ -1,0 +1,60 @@
+{
+  "isJoi": true,
+  "name": "ValidationError",
+  "details": [
+    {
+      "message": "\"name\" length must be less than or equal to 10 characters long",
+      "path": [
+        "name"
+      ],
+      "type": "string.max",
+      "context": {
+        "limit": 10,
+        "value": "ceci est un nom trop long",
+        "key": "name",
+        "label": "name"
+      }
+    },
+    {
+      "message": "\"name\" with value \"ceci est un nom trop long\" fails to match the required pattern: /^([A-Za-z0-9]*)$/",
+      "path": [
+        "name"
+      ],
+      "type": "string.regex.base",
+      "context": {
+        "pattern": {},
+        "value": "ceci est un nom trop long",
+        "key": "name",
+        "label": "name"
+      }
+    },
+    {
+      "message": "\"count\" must be greater than 0",
+      "path": [
+        "count"
+      ],
+      "type": "number.greater",
+      "context": {
+        "limit": 0,
+        "value": -1,
+        "key": "count",
+        "label": "count"
+      }
+    },
+    {
+      "message": "\"alias\" is required",
+      "path": [
+        "alias"
+      ],
+      "type": "any.required",
+      "context": {
+        "key": "alias",
+        "label": "alias"
+      }
+    }
+  ],
+  "_object": {
+    "name": "ceci est un nom trop long",
+    "count": -1
+  }
+}

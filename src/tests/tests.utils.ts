@@ -1,5 +1,7 @@
 import { set as _set } from 'lodash'
+import { Omit } from 'yargs'
 import { ErreurDO, IrisException } from '~/exception'
+import '~/tests/expect.extend'
 
 // TODO : remove test-utils and migrate to an other lib  @u-iris/iris-test-utils
 
@@ -31,15 +33,14 @@ export function checkFunctionCall(functionToHaveBeenCalled: Function, ...functio
     expect(functionToHaveBeenCalled).toHaveBeenCalledWith(...functionArgs)
 }
 
-interface IErrorChecked {
-    field: string,
-    codes: string[]
+type IErrorChecked = Omit<ErreurDO, 'libelleErreur'> & {
+    libelleErreur?: string
 }
 
 /**
  * Function checking that an exception is thrown when an async function is called
  * @param {*} exceptionClass, constructor of the thrown exception
- * @param {array} errors, exhaustive array of the error codes thrown in exception
+ * @param {array} errors, exhaustive array of the error errors thrown in exception
  * @param {function} functionToTest, function to call
  * @param  {...any} functionArgs, arguments of the function to call
  * @deprecated please use @u-iris/iris-test-utils
@@ -53,7 +54,11 @@ export async function checkException<T extends IrisException>(
     // WHEN
     let result = null
     try {
-        await functionToTest.apply(null, functionArgs)
+        const r = functionToTest.apply(null, functionArgs)
+        if (r instanceof Promise) {
+            await r
+        }
+
     } catch (e) {
         // checking exception throwed within async function
         result = e
@@ -65,22 +70,24 @@ export async function checkException<T extends IrisException>(
 
     const exception = result as T
 
-    // Create object with errors as keys and errorLabels as values
-    const errorsKeys: { [field: string]: string[] } = {}
-    exception.errors.forEach((obj: ErreurDO) => {
-        if (!errorsKeys.hasOwnProperty(obj.champErreur)) {
-            errorsKeys[obj.champErreur] = []
-        }
-        if (errorsKeys[obj.champErreur].indexOf(obj.codeErreur) === -1) {
-            errorsKeys[obj.champErreur].push(obj.codeErreur)
-        }
-    })
     // Check that each given errorCode is present in the result
-    errors.forEach(err => {
-        expect(errorsKeys).toHaveProperty([err.field])
-        err.codes.forEach(code => expect(errorsKeys[err.field]).toContain(code))
-        expect(errorsKeys[err.field]).toHaveLength(err.codes.length)
-    })
+    // for (const errorThrown of exception.errors) {
+    //     expect(errors).toContainObjectLike({champErreur: errorThrown.champErreur, codeErreur: errorThrown.codeErreur})
+    //     const expectedErrorFound = errors.find(e => e.champErreur === errorThrown.champErreur && e.codeErreur === errorThrown.codeErreur)
+    //     expect(expectedErrorFound).toBeDefined()
+    //     if (expectedErrorFound && expectedErrorFound.libelleErreur) {
+    //         expect(errorThrown.libelleErreur).toEqual(expectedErrorFound.libelleErreur)
+    //     }
+    // }
+    for (const expectedError of errors) {
+        const {champErreur, codeErreur} = expectedError
+        expect(exception.errors).toContainObjectLike({champErreur, codeErreur})
+        const errorThrown = exception.errors.find(e => e.champErreur === expectedError.champErreur && e.codeErreur === expectedError.codeErreur)
+        expect(errorThrown).toBeDefined()
+        if (errorThrown && expectedError.libelleErreur) {
+            expect(errorThrown.libelleErreur).toEqual(expectedError.libelleErreur)
+        }
+    }
     // Check that there is no other errorCode
     expect(exception.errors).toHaveLength(errors.length)
 }

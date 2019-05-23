@@ -5,17 +5,8 @@ import { Max as MaxLength, Min as MinLength } from 'tsdv-joi/constraints/string'
 import { Joi } from 'tsdv-joi/core'
 import { BusinessException } from '~/exception/BusinessException'
 import { checkException } from '~/tests/tests.utils'
-import { checkByDecorator } from '~/validators/joiDecoratorHelper'
-import { BusinessValidator } from '~/validators/joiDecorators'
-
-function checkAsync<T>(model: T): Promise<T> {
-    try {
-        const result = checkByDecorator(model)
-        return Promise.resolve(result)
-    } catch (e) {
-        return Promise.reject(e)
-    }
-}
+import { BusinessValidator } from '~/validators/decorators/joiDecorators'
+import { checkByDecorator } from '~/validators/helpers/joiDecoratorHelper'
 
 describe('JoiDecoratorHelper', () => {
 
@@ -41,7 +32,7 @@ describe('JoiDecoratorHelper', () => {
 
             const instance: DTO = new DTO()
             instance.name = 'nom'
-            await checkException(BusinessException, [{field: 'name', codes: ['string.min']}], checkAsync, instance)
+            await checkException(BusinessException, [{champErreur: 'name', codeErreur: 'string.min'}], checkByDecorator, instance)
         })
 
         it('should not validate name with tsdv-joi', async () => {
@@ -53,7 +44,7 @@ describe('JoiDecoratorHelper', () => {
 
             const instance: DTO = new DTO()
 
-            await checkException(BusinessException, [{field: 'firstname', codes: ['any.required']}], checkAsync, instance)
+            await checkException(BusinessException, [{champErreur: 'firstname', codeErreur: 'any.required'}], checkByDecorator, instance)
         })
 
         it('should not validate cause of multiple errors', async () => {
@@ -71,10 +62,10 @@ describe('JoiDecoratorHelper', () => {
             instance.firstname = 'nom'
             instance.age = 15
 
-            await checkException(BusinessException, [{field: 'firstname', codes: ['string.min']}, {
-                field: 'age',
-                codes: ['number.greater']
-            }], checkAsync, instance)
+            await checkException(BusinessException, [
+                {champErreur: 'firstname', codeErreur: 'string.min'},
+                {champErreur: 'age', codeErreur: 'number.greater'}
+            ], checkByDecorator, instance)
         })
     })
 })

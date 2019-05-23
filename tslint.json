@@ -17,7 +17,9 @@
     "interface-name": false,
     "no-submodule-imports": false,
     "forin": false,
-    "radix": false
+    "radix": false,
+    "no-namespace": false,
+    "max-classes-per-file": false
   },
   "rulesDirectory": []
 }

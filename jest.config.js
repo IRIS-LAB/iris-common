@@ -11,7 +11,7 @@ module.exports = {
     'json'
   ],
   transform: {
-    "^.+\\.(t|j)s$": "ts-jest"
+    "^.+\\.(ts|js)$": "ts-jest"
   },
   collectCoverage: true,
   coverageDirectory: '<rootDir>/coverage',
@@ -35,6 +35,10 @@ module.exports = {
     'text',
     'html',
     'cobertura'
-  ]
-
+  ],
+  globals: {
+    "ts-jest": {
+      diagnostics: true
+    }
+  }
 }

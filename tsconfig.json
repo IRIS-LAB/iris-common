@@ -17,7 +17,8 @@
       "jest"
     ],
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "@types"
     ],
     "noImplicitAny": true,
     "strictPropertyInitialization": false,
@@ -32,7 +33,8 @@
   },
   "include": [
     "src/**/*",
-    "spec/**/*"
+    "spec/**/*",
+    "@types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules"

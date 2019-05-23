@@ -1,5 +1,5 @@
 import { Validator } from 'tsdv-joi'
-import { validateJoiResult } from '~/validators/validatorHelper'
+import { validateJoiResult } from '~/validators/helpers/validatorHelper'
 
 /**
  * Validate an object with the Joi model
