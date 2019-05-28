@@ -1,5 +1,5 @@
 import deepmerge from 'deepmerge'
-import { Validator } from 'tsdv-joi'
+import { Validator as ValidatorJoi } from 'tsdv-joi'
 import { validateJoiResult } from '~/validators/helpers/validatorHelper'
 import { IMessages } from '~/validators/IMessages'
 
@@ -7,7 +7,7 @@ export interface ValidationOptions {
     messages: IMessages
 }
 
-export class ValidatorLBS {
+export class Validator {
     private options?: ValidationOptions
 
     constructor(options?: ValidationOptions) {
@@ -15,7 +15,7 @@ export class ValidatorLBS {
     }
 
     public validate<T>(object: T, options ?: ValidationOptions): T {
-        return validateJoiResult(new Validator({abortEarly: false}).validate(object), deepmerge(this.options ? this.options : {}, options || {}).messages)
+        return validateJoiResult(new ValidatorJoi({abortEarly: false}).validate(object), deepmerge(this.options ? this.options : {}, options || {}).messages)
     }
 
 }

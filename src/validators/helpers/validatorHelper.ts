@@ -15,14 +15,14 @@ export function validateJoiResult<T>(result: ValidationResult<T>, messages?: IMe
                 return
             }
             const field = context.key
-            return new ErreurDO(field, type, getMessage(field, type, context, messages))
+            return new ErreurDO(field, type, getMessage(field, type, context, message, messages))
         }).filter(e => e !== undefined && e !== null) as ErreurDO[]
         throw new BusinessException(errors)
     }
     return result.value
 }
 
-function getMessage(field: string, type: string, context: any, messages?: IMessages | null): string {
+function getMessage(field: string, type: string, context: any, message: string, messages?: IMessages | null): string {
     if (messages) {
         let found = false
         const splittedType = type.split('.')
@@ -49,5 +49,5 @@ function getMessage(field: string, type: string, context: any, messages?: IMessa
             return result
         }
     }
-    return `${field}.${type}`
+    return message
 }

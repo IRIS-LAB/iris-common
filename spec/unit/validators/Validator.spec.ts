@@ -2,9 +2,9 @@ import 'reflect-metadata'
 import { Joi } from 'tsdv-joi/core'
 import { BusinessException } from '~/exception'
 import { checkException } from '~/tests'
-import { BusinessValidator, ValidatorLBS } from '~/validators'
+import { BusinessValidator, Validator } from '~/validators'
 
-describe('ValidatorLBS', () => {
+describe('Validator', () => {
     describe('validate with base options', () => {
         it('should validate', async () => {
             class DTO {
@@ -22,7 +22,7 @@ describe('ValidatorLBS', () => {
             const dto = new DTO()
             dto.name = 'ceci est un nom trop long'
             dto.count = -1
-            const validatorLBS = new ValidatorLBS({
+            const validatorLBS = new Validator({
                 messages: {
                     string: {
                         max: 'Field $field must be $limit char max',
@@ -37,7 +37,7 @@ describe('ValidatorLBS', () => {
                 {champErreur: 'name', codeErreur: 'string.max', libelleErreur: 'Field name must be 10 char max'},
                 {champErreur: 'name', codeErreur: 'string.regex.base', libelleErreur: 'Field name is not well format'},
                 {champErreur: 'count', codeErreur: 'number.greater', libelleErreur: 'Field count must be greater than 0'},
-                {champErreur: 'alias', codeErreur: 'any.required', libelleErreur: 'alias.any.required'}
+                {champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required'}
             ], validatorLBS.validate.bind(validatorLBS), dto)
         })
     })
@@ -58,7 +58,7 @@ describe('ValidatorLBS', () => {
             const dto = new DTO()
             dto.name = 'ceci est un nom trop long'
             dto.count = -1
-            const validatorLBS = new ValidatorLBS({
+            const validatorLBS = new Validator({
                 messages: {
                     string: {
                         max: 'Field $field must be $limit char max',
@@ -66,14 +66,14 @@ describe('ValidatorLBS', () => {
                     },
                     number: {
                         greater: 'Field $field must be greater than $limit'
-                    },
+                    }
                 }
             })
             await checkException(BusinessException, [
                 {champErreur: 'name', codeErreur: 'string.max', libelleErreur: 'Field name must be 10 char max'},
                 {champErreur: 'name', codeErreur: 'string.regex.base', libelleErreur: 'Field name is bad formatted'},
                 {champErreur: 'count', codeErreur: 'number.greater', libelleErreur: 'Field count must be greater than 0'},
-                {champErreur: 'alias', codeErreur: 'any.required', libelleErreur: 'alias.any.required'}
+                {champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required'}
             ], validatorLBS.validate.bind(validatorLBS), dto, {messages: {
                 string: {
                     regex: 'Field $field is bad formatted'
