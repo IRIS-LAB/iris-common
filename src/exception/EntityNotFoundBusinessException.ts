@@ -1,4 +1,4 @@
-import { ErreurDO } from '~/do/ErreurDO'
+import { ErreurDO } from '../do'
 import { BusinessException } from './BusinessException'
 
 export class EntityNotFoundBusinessException extends BusinessException {

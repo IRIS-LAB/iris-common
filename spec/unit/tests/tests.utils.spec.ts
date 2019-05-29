@@ -61,7 +61,7 @@ describe('TestUtils', () => {
     })
 
     describe('checkException', () => {
-        it('should valid exception codeErreur and error errors', async () => {
+        it('should valid exception codeErreur and error erreurs', async () => {
             const module = {
                 fct: async (type: string, name: number) => {
                     throw new BusinessException([{champErreur: 'champErreur', codeErreur: 'required', libelleErreur: 'champErreur is required'}])

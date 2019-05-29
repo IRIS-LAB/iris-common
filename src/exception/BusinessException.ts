@@ -1,5 +1,5 @@
-import { ErreurDO } from '~/do/ErreurDO'
-import { IrisException } from '~/exception/IrisException'
+import { ErreurDO } from '../do'
+import { IrisException } from './IrisException'
 
 export class BusinessException extends IrisException {
     constructor(errors: ErreurDO[]) {

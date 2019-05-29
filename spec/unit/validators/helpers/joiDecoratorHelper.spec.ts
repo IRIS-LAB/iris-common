@@ -47,7 +47,7 @@ describe('JoiDecoratorHelper', () => {
             await checkException(BusinessException, [{champErreur: 'firstname', codeErreur: 'any.required'}], checkByDecorator, instance)
         })
 
-        it('should not validate cause of multiple errors', async () => {
+        it('should not validate cause of multiple erreurs', async () => {
             // tslint:disable-next-line:max-classes-per-file
             class DTO {
                 @MinLength(5)

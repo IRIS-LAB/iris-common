@@ -1,5 +1,5 @@
-import { SchemaLike, validate } from 'joi'
-import { validateJoiResult } from '~/validators/helpers/validatorHelper'
+import { Schema, validate } from 'joi'
+import { validateJoiResult } from './validatorHelper'
 
 /**
  * Validate an object with the Joi model
@@ -8,6 +8,6 @@ import { validateJoiResult } from '~/validators/helpers/validatorHelper'
  * @return a valid object
  */
 // tslint:disable-next-line:ban-types
-export function check<T>(model: SchemaLike, object: T): T {
+export function check<T>(model: Schema, object: T): T {
     return validateJoiResult(validate(object, model, {abortEarly: false}))
 }

@@ -14,10 +14,10 @@ npm install
 npm run build
 
 # run unit tests
-npm run unit
+npm run test:unit
 
 # run e2e tests
-npm run e2e
+npm run test:e2e
 
 # run all tests
 npm test
@@ -44,7 +44,7 @@ const error = ErreurDO('champErreur', 'codeErreur', 'libelleErreur')
 
 ## Exceptions
 
-Classes for exceptions that all have the property `errors`.
+Classes for exceptions that all have the property `erreurs`.
 
 - BusinessException
 - EntityNotFoundBusinessException

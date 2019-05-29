@@ -1,7 +1,35 @@
 {
-  "extends" : "./tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "strict": true,
+    "target": "es5",
+    "module": "es2015",
+    "sourceMap": true,
+    "lib": [
+      "es2015",
+      "dom"
+    ],
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "outDir": "./dist",
+    "types": [
+      "@types/node",
+      "jest"
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "@types"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
+    "strictPropertyInitialization": false,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "@types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules"

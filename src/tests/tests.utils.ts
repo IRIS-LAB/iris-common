@@ -1,7 +1,9 @@
 import { set as _set } from 'lodash'
 import { Omit } from 'yargs'
-import { ErreurDO, IrisException } from '~/exception'
-import '~/tests/expect.extend'
+import { ErreurDO, IrisException } from '../exception'
+
+// tslint:disable-next-line:no-var-requires
+require('./jest/jest.extends')
 
 // TODO : remove test-utils and migrate to an other lib  @u-iris/iris-test-utils
 
@@ -40,7 +42,7 @@ type IErrorChecked = Omit<ErreurDO, 'libelleErreur'> & {
 /**
  * Function checking that an exception is thrown when an async function is called
  * @param {*} exceptionClass, constructor of the thrown exception
- * @param {array} errors, exhaustive array of the error errors thrown in exception
+ * @param {array} errors, exhaustive array of the error erreurs thrown in exception
  * @param {function} functionToTest, function to call
  * @param  {...any} functionArgs, arguments of the function to call
  * @deprecated please use @u-iris/iris-test-utils
@@ -71,9 +73,9 @@ export async function checkException<T extends IrisException>(
     const exception = result as T
 
     // Check that each given errorCode is present in the result
-    // for (const errorThrown of exception.errors) {
-    //     expect(errors).toContainObjectLike({champErreur: errorThrown.champErreur, codeErreur: errorThrown.codeErreur})
-    //     const expectedErrorFound = errors.find(e => e.champErreur === errorThrown.champErreur && e.codeErreur === errorThrown.codeErreur)
+    // for (const errorThrown of exception.erreurs) {
+    //     expect(erreurs).toContainObjectLike({champErreur: errorThrown.champErreur, codeErreur: errorThrown.codeErreur})
+    //     const expectedErrorFound = erreurs.find(e => e.champErreur === errorThrown.champErreur && e.codeErreur === errorThrown.codeErreur)
     //     expect(expectedErrorFound).toBeDefined()
     //     if (expectedErrorFound && expectedErrorFound.libelleErreur) {
     //         expect(errorThrown.libelleErreur).toEqual(expectedErrorFound.libelleErreur)
@@ -81,15 +83,15 @@ export async function checkException<T extends IrisException>(
     // }
     for (const expectedError of errors) {
         const {champErreur, codeErreur} = expectedError
-        expect(exception.errors).toContainObjectLike({champErreur, codeErreur})
-        const errorThrown = exception.errors.find(e => e.champErreur === expectedError.champErreur && e.codeErreur === expectedError.codeErreur)
+        expect(exception.erreurs).toContainObjectLike({champErreur, codeErreur})
+        const errorThrown = exception.erreurs.find(e => e.champErreur === expectedError.champErreur && e.codeErreur === expectedError.codeErreur)
         expect(errorThrown).toBeDefined()
         if (errorThrown && expectedError.libelleErreur) {
             expect(errorThrown.libelleErreur).toEqual(expectedError.libelleErreur)
         }
     }
     // Check that there is no other errorCode
-    expect(exception.errors).toHaveLength(errors.length)
+    expect(exception.erreurs).toHaveLength(errors.length)
 }
 
 /**

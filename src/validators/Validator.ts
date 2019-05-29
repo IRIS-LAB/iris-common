@@ -1,7 +1,7 @@
 import deepmerge from 'deepmerge'
 import { Validator as ValidatorJoi } from 'tsdv-joi'
-import { validateJoiResult } from '~/validators/helpers/validatorHelper'
-import { IMessages } from '~/validators/IMessages'
+import { validateJoiResult } from './helpers/validatorHelper'
+import { IMessages } from './IMessages'
 
 export interface ValidationOptions {
     messages: IMessages

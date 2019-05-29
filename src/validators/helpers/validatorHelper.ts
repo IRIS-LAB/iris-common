@@ -1,10 +1,10 @@
 import { ValidationResult } from 'tsdv-joi/ValidationResult'
-import { ErreurDO } from '~/do/ErreurDO'
-import { BusinessException } from '~/exception/BusinessException'
-import { IMessages } from '~/validators/IMessages'
+import { ErreurDO } from '../../do'
+import { BusinessException } from '../../exception'
+import { IMessages } from '../IMessages'
 
 /**
- * Check the validation result and throw BusinessException with champErreur errors if the validation fails.
+ * Check the validation result and throw BusinessException with champErreur erreurs if the validation fails.
  * @param result the valid object
  * @param messages messages object
  */
