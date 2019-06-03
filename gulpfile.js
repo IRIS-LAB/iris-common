@@ -32,13 +32,13 @@ gulp.task('build:typescript', gulp.series(() => {
     .pipe(webpack(require('./webpack.config.js')))
     .pipe(gulp.dest(options.output))
 }))
-gulp.task('build:concat-typings', () => {
-  return gulp.src([path.resolve(options.output, 'types/index.d.ts'), path.resolve(__dirname, '@types', '**/*.d.ts')])
-    .pipe(concat('index.d.ts'))
-    .pipe(gulp.dest(path.resolve(options.output, 'types')))
-})
+// gulp.task('build:concat-typings', () => {
+//   return gulp.src([path.resolve(options.output, 'types/index.d.ts'), path.resolve(__dirname, '@types', '**/*.d.ts')])
+//     .pipe(concat('index.d.ts'))
+//     .pipe(gulp.dest(path.resolve(options.output, 'types')))
+// })
 gulp.task('watch', () => {
   gulp.watch(tsProject.config.include, gulp.series('build'))
 })
-gulp.task('build', gulp.series('build:typescript-typings', 'build:typescript', 'build:concat-typings'))
+gulp.task('build', gulp.series('build:typescript-typings', 'build:typescript'))
 gulp.task('default', gulp.series('clean', 'build'))
