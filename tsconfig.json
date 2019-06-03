@@ -11,11 +11,6 @@
     ],
     "baseUrl": "./src",
     "outDir": "./build",
-    "paths": {
-      "~/*": [
-        "./*"
-      ]
-    },
     "types": [
       "@types/node",
       "jest"

@@ -9,5 +9,5 @@ import { validateJoiResult } from './validatorHelper'
  */
 // tslint:disable-next-line:ban-types
 export function check<T>(model: Schema, object: T): T {
-    return validateJoiResult(validate(object, model, {abortEarly: false}))
+  return validateJoiResult(validate(object, model, { abortEarly: false }))
 }

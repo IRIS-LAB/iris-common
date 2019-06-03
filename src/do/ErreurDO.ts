@@ -1,32 +1,32 @@
 /**
- * Classe représentant une erreur fonctionnelle.
+ * Functional error DO.
  */
 export class ErreurDO {
 
-    /**
-     * Le nom du champ en erreur.
-     */
-    public champErreur: string
+  /**
+   * Fielname in error
+   */
+  public champErreur: string
 
-    /**
-     * Le code de l'erreur, généralement ${type_du_champ}.${type_erreur} (ex: string.required).
-     */
-    public codeErreur: string
+  /**
+   * Error code
+   */
+  public codeErreur: string
 
-    /**
-     * Le libellé de l'erreur.
-     */
-    public libelleErreur: string
+  /**
+   * Error label
+   */
+  public libelleErreur: string
 
-    /**
-     * Constructeur par défaut
-     * @param champErreur (string) le champ en erreur
-     * @param codeErreur (string) le code de l'erreur
-     * @param libelleErreur (string) le libellé par défaut
-     */
-    constructor(champErreur: string, codeErreur: string, libelleErreur: string) {
-        this.libelleErreur = libelleErreur
-        this.codeErreur = codeErreur
-        this.champErreur = champErreur
-    }
+  /**
+   * Constructor
+   * @param champErreur (string) error fieldname
+   * @param codeErreur (string) error code
+   * @param libelleErreur (string) error label
+   */
+  constructor(champErreur: string, codeErreur: string, libelleErreur: string) {
+    this.libelleErreur = libelleErreur
+    this.codeErreur = codeErreur
+    this.champErreur = champErreur
+  }
 }

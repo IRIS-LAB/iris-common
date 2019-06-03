@@ -49,12 +49,14 @@ Classes for exceptions that all have the property `erreurs`.
 - BusinessException
 - EntityNotFoundBusinessException
 - TechnicalException
+- SecurityException
 
 ```js
 import {
   BusinessException,
   EntityNotFoundBusinessException,
-  TechnicalException
+  TechnicalException,
+  SecurityException
 } from '@u-iris/iris-common'
 
 const testBusinessException = new BusinessException(errorsArray)
@@ -65,52 +67,134 @@ const testTechnicalException = new TechnicalException(
   errorsArray,
   causedException
 )
+const securityException = new SecurityException(
+  errorsArray
+)
 ```
 
-## Unit Test Helpers
+## Validators (with Joi)
 
-Severals utils functions for unit tests are available :
+### Javascript
+```javascript
+import { check } from '@u-iris/iris-common'
+// Joi shema
+const model = object().keys({
+  name: string().max(50).required()
+})
+// Object to validate
+const instance = { name: 'nom' }
+const aValidInstance = check(model, instance) // can throw BusinessException if instance of not valid
+```
 
-- **callFunctionAndCheckResult**: function calling an async function with arguments and checking than its result is correct.  
-  _`async function callFunctionAndCheckResult(functionToCall, expectedResult, ...functionArgs)`_
+### Typescript
 
-- **checkFunctionCall**: function checking if a given function has been called exactly one time, with given params as arguments.  
-  _`function checkFunctionCall(functionToHaveBeenCalled, ...functionArgs)`_
+#### Model definition
 
-- **checkException**: function checking that an exception is thrown when an async function is called.  
-  Its arguments are the constructor of the thrown exception, an exhaustive array of the error codes thrown in exception, the function to call, and the arguments of the function to call.  
-  _`async function checkException(exceptionClass, errorCodes, functionToTest, ...functionArgs)`_
+You can use _tsdv-joi_ validators :
 
-- **initMocks**: function creating an object of mocked functions (for ex., used to mock models or dao in node projects).  
-  Its argument should be an array of objects like `{ path: 'function.path.inFinalObject', value: returnedValueOfTheMock }`.  
-  _`function initMocks(functionsToMock)`_
+```typescript
+import 'reflect-metadata'
+import { Max as MaxLength } from 'tsdv-joi/constraints/string'
+import { Required } from 'tsdv-joi/constraints/any'
+import { checkByDecorator } from '@u-iris/iris-common'
 
-```js
-import { checkFunctionCall } from '@u-iris/iris-common'
-import { functionOne } from 'moduleToTest' // function taking two parameters
-describe('functionOne', () => {
-    it('should call functionTwo with arguments "toto" and "test", and return "tototest", when called with the parameter "toto" and "test"', () => {
-        const functionTwo = jest.fn()
-        await callFunctionAndCheckResult(functionOne, "tototest", "toto", "test")
-        checkFunctionCall(functionTwo, "toto", "test")
-    })
+class DTO {
+    @MaxLength(50)
+    @Required()
+    public name: string
+}
+
+// Object to validate
+const instance: DTO = new DTO()
+instance.name = 'nom'
+const aValidInstance = checkByDecorator(instance) // can throw BusinessException if instance of not valid
+```
+
+Or **@BusinessValidator** decorator :
+
+```typescript
+import 'reflect-metadata'
+import { Joi } from 'tsdv-joi/core'
+import { BusinessValidator, checkByDecorator } from '@u-iris/iris-common'
+
+class DTO {
+    @BusinessValidator(Joi.string().max(50).required())
+    public name: string
+}
+
+// Object to validate
+const instance: DTO = new DTO()
+instance.name = 'nom'
+const aValidInstance = checkByDecorator(instance) // can throw BusinessException if instance of not valid
+```
+
+#### Validator with options
+
+Instead of using _checkByDecorator_ function to validate your beans, you can use the **Validator** class and override joi error messages.
+
+Create a new Validator instance
+
+```typescript
+import { Validator } from '@u-iris/iris-common'
+const validator = new Validator()
+```
+
+You can override error messages
+
+```typescript
+import { Validator } from '@u-iris/iris-common'
+const validator = new Validator({
+  messages: {...}
 })
 ```
+messages should be formatted like {'field type' : {'rule type' : 'message'}}
 
-## Validators
+To override `Joi.string().max(10)` rule you should set message like `{string : {max : 'Field $field must be $limit char max'}}`
 
-Validator functions
+You can use some variables in your messages : 
+- $field, $key and $label are replaced by the name of the property
+- $value is replaced by the value of the property
+- more variables depending on the type of the rule ($limit in string.max or number.greater)
+ 
+To get a list of exhaustives field types and rule types, please see the [joi documentation](https://github.com/hapijs/joi)
 
-```js
-import { checkMail } from '@u-iris/iris-common'
+```typescript
+import 'reflect-metadata'
+import { Joi } from 'tsdv-joi/core'
+import { BusinessValidator, Validator } from '@u-iris/iris-common'
+class DTO {
+    @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
+    public name: string
+    
+    @BusinessValidator(Joi.number().greater(0))
+    public count: number
+    
+    @BusinessValidator(Joi.string().required())
+    public alias: string
+}
 
-const isMailValid = checkMail('mail.test@systeme-u.fr')
-```
+const dto = new DTO()
+dto.name = 'ceci est un nom trop long'
+dto.count = -1
 
-**check**: function to check an object with a Joi Model. Throw business exception with ErreurDO if check failed.
-
-```js
-import { check } from '@u-iris/iris-common'
-
-const isMailValid = checkJoi(ModelJoi, objectToValidate)
+// Create a new validator and set new messages
+const validator = new Validator({
+    messages: {
+      // messages format is {'field type' : {'rule type' : 'message'}}
+      
+      string: {
+        max: 'Field $field must be $limit char max',
+        regex: 'Field $field is not well format'
+      },
+      number: {
+        greater: 'Field $field must be greater than $limit'
+      }
+    }
+})
+validator.validate(dto)
+// Will throw BusinessException with erreurs :
+// { champErreur: 'name', codeErreur: 'string.max', libelleErreur: 'Field name must be 10 char max' } <- libelleErreur overriden by options
+// { champErreur: 'name', codeErreur: 'string.regex.base', libelleErreur: 'Field name is not well format' } <- libelleErreur overriden by options
+// { champErreur: 'count', codeErreur: 'number.greater', libelleErreur: 'Field count must be greater than 0' } <- libelleErreur overriden by options
+// { champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required' } <- libelleErreur not overriden
 ```
