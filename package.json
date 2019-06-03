@@ -18,7 +18,7 @@
     "type": "git",
     "url": "git+https://github.com/IRIS-LAB/iris-common.git"
   },
-  "author": "",
+  "author": "Léo Liénard <leo.lienard@systeme-u.fr>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/IRIS-LAB/iris-common/issues"
@@ -39,6 +39,8 @@
     "dts-bundle-webpack": "^1.0.2",
     "gulp": "^4.0.2",
     "gulp-clean": "^0.4.0",
+    "gulp-file": "^0.4.0",
+    "gulp-replace": "^1.0.0",
     "gulp-typescript": "^5.0.1",
     "jest": "^24.8.0",
     "jest-html-reporter": "^2.5.0",

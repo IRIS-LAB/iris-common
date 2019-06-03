@@ -1,6 +1,7 @@
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 const DtsBundleWebpack = require('dts-bundle-webpack')
+const pkg = require('./package.json')
 
 const rootDir = path.resolve(__dirname)
 
@@ -11,7 +12,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: "index.js",
-    library: '@u-iris/iris-common',
     libraryTarget: 'commonjs'
   },
   resolve: {
@@ -37,11 +37,11 @@ module.exports = {
   },
   plugins: [
     new DtsBundleWebpack({
-      name: '@u-iris/iris-common',
+      name: pkg.name,
       main: path.resolve(rootDir, 'build_temp/types/index.d.ts'),
       out: path.resolve(rootDir, 'dist/types/index.d.ts'),
       removeSource: true,
-      outputAsModuleFolder: false
+      outputAsModuleFolder: true
     })
   ]
 }
