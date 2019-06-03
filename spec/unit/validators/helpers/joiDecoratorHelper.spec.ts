@@ -1,10 +1,10 @@
+import { string } from 'joi'
 import 'reflect-metadata'
 import { Required } from 'tsdv-joi/constraints/any'
 import { Greater } from 'tsdv-joi/constraints/number'
 import { Max as MaxLength, Min as MinLength } from 'tsdv-joi/constraints/string'
 import { Joi } from 'tsdv-joi/core'
 import { BusinessException } from '~/exception/BusinessException'
-import { checkException } from '~/tests/tests.utils'
 import { BusinessValidator } from '~/validators/decorators/joiDecorators'
 import { checkByDecorator } from '~/validators/helpers/joiDecoratorHelper'
 
@@ -32,7 +32,21 @@ describe('JoiDecoratorHelper', () => {
 
             const instance: DTO = new DTO()
             instance.name = 'nom'
-            await checkException(BusinessException, [{champErreur: 'name', codeErreur: 'string.min'}], checkByDecorator, instance)
+
+            let exception = null
+            try {
+                checkByDecorator(instance)
+            } catch (e) {
+                exception = e
+            }
+            expect(exception).toBeDefined()
+            expect(exception).toBeInstanceOf(BusinessException)
+            const businessException = exception as BusinessException
+            expect(businessException.erreurs).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({champErreur: 'name', codeErreur: 'string.min'})
+                ])
+            )
         })
 
         it('should not validate name with tsdv-joi', async () => {
@@ -44,7 +58,20 @@ describe('JoiDecoratorHelper', () => {
 
             const instance: DTO = new DTO()
 
-            await checkException(BusinessException, [{champErreur: 'firstname', codeErreur: 'any.required'}], checkByDecorator, instance)
+            let exception = null
+            try {
+                checkByDecorator(instance)
+            } catch (e) {
+                exception = e
+            }
+            expect(exception).toBeDefined()
+            expect(exception).toBeInstanceOf(BusinessException)
+            const businessException = exception as BusinessException
+            expect(businessException.erreurs).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({champErreur: 'firstname', codeErreur: 'any.required'})
+                ])
+            )
         })
 
         it('should not validate cause of multiple erreurs', async () => {
@@ -62,10 +89,25 @@ describe('JoiDecoratorHelper', () => {
             instance.firstname = 'nom'
             instance.age = 15
 
-            await checkException(BusinessException, [
-                {champErreur: 'firstname', codeErreur: 'string.min'},
-                {champErreur: 'age', codeErreur: 'number.greater'}
-            ], checkByDecorator, instance)
+            let exception = null
+            try {
+                checkByDecorator(instance)
+            } catch (e) {
+                exception = e
+            }
+            expect(exception).toBeDefined()
+            expect(exception).toBeInstanceOf(BusinessException)
+            const businessException = exception as BusinessException
+            expect(businessException.erreurs).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({champErreur: 'firstname', codeErreur: 'string.min'})
+                ])
+            )
+            expect(businessException.erreurs).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({champErreur: 'age', codeErreur: 'number.greater'})
+                ])
+            )
         })
     })
 })

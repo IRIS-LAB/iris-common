@@ -3,7 +3,6 @@ const gulp = require('gulp')
 const clean = require('gulp-clean')
 const ts = require('gulp-typescript')
 const webpack = require('webpack-stream')
-const concat = require('gulp-concat')
 
 const options = {
   src: path.resolve(__dirname, 'src'),

@@ -1,7 +1,6 @@
 import 'reflect-metadata'
 import { Joi } from 'tsdv-joi/core'
 import { BusinessException } from '~/exception'
-import { checkException } from '~/tests'
 import { BusinessValidator, Validator } from '~/validators'
 
 describe('Validator', () => {
@@ -33,15 +32,35 @@ describe('Validator', () => {
                     },
                 }
             })
-            await checkException(BusinessException, [
-                {champErreur: 'name', codeErreur: 'string.max', libelleErreur: 'Field name must be 10 char max'},
-                {champErreur: 'name', codeErreur: 'string.regex.base', libelleErreur: 'Field name is not well format'},
-                {champErreur: 'count', codeErreur: 'number.greater', libelleErreur: 'Field count must be greater than 0'},
-                {champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required'}
-            ], validatorLBS.validate.bind(validatorLBS), dto)
+
+            let exception = null
+            try {
+                validatorLBS.validate(dto)
+            } catch (e) {
+                exception = e
+            }
+            expect(exception).toBeDefined()
+            expect(exception).toBeInstanceOf(BusinessException)
+            const businessException = exception as BusinessException
+            expect(businessException.erreurs).toContainEqual({
+                champErreur: 'name',
+                codeErreur: 'string.max',
+                libelleErreur: 'Field name must be 10 char max'
+            })
+            expect(businessException.erreurs).toContainEqual({
+                champErreur: 'name',
+                codeErreur: 'string.regex.base',
+                libelleErreur: 'Field name is not well format'
+            })
+            expect(businessException.erreurs).toContainEqual({
+                champErreur: 'count',
+                codeErreur: 'number.greater',
+                libelleErreur: 'Field count must be greater than 0'
+            })
+            expect(businessException.erreurs).toContainEqual({champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required'})
         })
     })
-    describe('validate with specifics options passed to validate functoin', () => {
+    describe('validate with specifics options passed to validate function', () => {
         it('should validate', async () => {
             class DTO {
                 @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
@@ -69,16 +88,37 @@ describe('Validator', () => {
                     }
                 }
             })
-            await checkException(BusinessException, [
-                {champErreur: 'name', codeErreur: 'string.max', libelleErreur: 'Field name must be 10 char max'},
-                {champErreur: 'name', codeErreur: 'string.regex.base', libelleErreur: 'Field name is bad formatted'},
-                {champErreur: 'count', codeErreur: 'number.greater', libelleErreur: 'Field count must be greater than 0'},
-                {champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required'}
-            ], validatorLBS.validate.bind(validatorLBS), dto, {messages: {
-                string: {
-                    regex: 'Field $field is bad formatted'
-                }
-                }})
+            let exception = null
+            try {
+                validatorLBS.validate(dto, {
+                    messages: {
+                        string: {
+                            regex: 'Field $field is bad formatted'
+                        }
+                    }
+                })
+            } catch (e) {
+                exception = e
+            }
+            expect(exception).toBeDefined()
+            expect(exception).toBeInstanceOf(BusinessException)
+            const businessException = exception as BusinessException
+            expect(businessException.erreurs).toContainEqual({
+                champErreur: 'name',
+                codeErreur: 'string.max',
+                libelleErreur: 'Field name must be 10 char max'
+            })
+            expect(businessException.erreurs).toContainEqual({
+                champErreur: 'name',
+                codeErreur: 'string.regex.base',
+                libelleErreur: 'Field name is bad formatted'
+            })
+            expect(businessException.erreurs).toContainEqual({
+                champErreur: 'count',
+                codeErreur: 'number.greater',
+                libelleErreur: 'Field count must be greater than 0'
+            })
+            expect(businessException.erreurs).toContainEqual({champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required'})
         })
     })
 })

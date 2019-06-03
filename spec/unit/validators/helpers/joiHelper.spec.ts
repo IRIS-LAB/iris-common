@@ -1,6 +1,5 @@
 import { number, object, Schema, string } from 'joi'
 import { BusinessException } from '~/exception/BusinessException'
-import { checkException } from '~/tests/tests.utils'
 import { check } from '~/validators/helpers/joiHelper'
 
 function checkAsync<T>(model: Schema, o: T): Promise<T> {
@@ -21,21 +20,50 @@ describe('JoiHelper', () => {
                 name: string().max(50).required(),
             }), instance)).toEqual(instance)
         })
-        it('should not validate name with min length', async () => {
+        it('should not validate name with min length', () => {
             const instance = {name: 'nom'}
-            await checkException(BusinessException, [{champErreur: 'name', codeErreur: 'string.min'}], checkAsync, object().keys({
-                name: string().min(5).required(),
-            }), instance)
+            let exception = null
+            try {
+                check(object().keys({
+                    name: string().min(5).required(),
+                }), instance)
+            } catch (e) {
+                exception = e
+            }
+            expect(exception).toBeDefined()
+            expect(exception).toBeInstanceOf(BusinessException)
+            const businessException = exception as BusinessException
+            expect(businessException.erreurs).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({champErreur: 'name', codeErreur: 'string.min'})
+                ])
+            )
         })
-        it('should not validate cause of multiple erreurs', async () => {
+        it('should not validate cause of multiple erreurs', () => {
             const instance = {firstname: 'nom', age: 15}
-            await checkException(BusinessException, [
-                {champErreur: 'firstname', codeErreur: 'string.min'},
-                {champErreur: 'age', codeErreur: 'number.greater'}
-            ], checkAsync, object().keys({
-                firstname: string().min(5).required(),
-                age: number().greater(18),
-            }), instance)
+
+            let exception = null
+            try {
+                check(object().keys({
+                    firstname: string().min(5).required(),
+                    age: number().greater(18),
+                }), instance)
+            } catch (e) {
+                exception = e
+            }
+            expect(exception).toBeDefined()
+            expect(exception).toBeInstanceOf(BusinessException)
+            const businessException = exception as BusinessException
+            expect(businessException.erreurs).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({champErreur: 'firstname', codeErreur: 'string.min'})
+                ])
+            )
+            expect(businessException.erreurs).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({champErreur: 'age', codeErreur: 'number.greater'})
+                ])
+            )
         })
     })
 })
