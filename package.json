@@ -33,7 +33,6 @@
     "@babel/preset-env": "^7.4.5",
     "@types/jest": "^24.0.13",
     "@types/joi": "=10.4.2",
-    "@types/lodash": "^4.14.129",
     "@types/node": "^12.0.2",
     "awesome-typescript-loader": "^5.2.1",
     "dts-bundle-webpack": "^1.0.2",
@@ -56,7 +55,6 @@
   "dependencies": {
     "deepmerge": "^3.2.0",
     "joi": "^14.3.1",
-    "lodash": "^4.17.11",
     "reflect-metadata": "^0.1.13",
     "tsdv-joi": "0.0.12"
   }

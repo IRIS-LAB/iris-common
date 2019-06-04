@@ -3,8 +3,8 @@ import { BusinessException } from './BusinessException'
 
 export class EntityNotFoundBusinessException extends BusinessException {
 
-  constructor(error: ErreurDO) {
-    super([error])
+  constructor(errors: ErreurDO[] | ErreurDO) {
+    super(errors)
     Object.setPrototypeOf(this, EntityNotFoundBusinessException.prototype)
   }
 }
