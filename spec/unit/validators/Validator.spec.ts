@@ -61,7 +61,7 @@ describe('Validator', () => {
     })
   })
   describe('validate with specifics options passed to validate function', () => {
-    it('should validate', async () => {
+    it('should throw error', async () => {
       class DTO {
         @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
         public name: string
@@ -119,6 +119,19 @@ describe('Validator', () => {
         libelleErreur: 'Field count must be greater than 0'
       })
       expect(businessException.erreurs).toContainEqual({ champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required' })
+    })
+    it('should validate with unknown fields', () => {
+      class DTO {
+        @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
+        public name: string
+
+        public count: number
+      }
+
+      const dto = new DTO()
+      dto.name = 'cool'
+      dto.count = -1
+      expect(new Validator().validate(dto)).toEqual({name: 'cool', count: -1})
     })
   })
 })

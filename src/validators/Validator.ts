@@ -1,10 +1,12 @@
 import deepmerge from 'deepmerge'
+import { ValidationOptions as JoiValidationOptions } from 'joi'
 import { Validator as ValidatorJoi } from 'tsdv-joi'
 import { validateJoiResult } from './helpers/validatorHelper'
 import { IMessages } from './IMessages'
 
 export interface ValidationOptions {
-  messages: IMessages
+  messages?: IMessages;
+  joiOptions?: JoiValidationOptions
 }
 
 /**
@@ -27,7 +29,15 @@ export class Validator {
    * @param options options like messages
    */
   public validate<T>(object: T, options ?: ValidationOptions): T {
-    return validateJoiResult(new ValidatorJoi({ abortEarly: false }).validate(object), deepmerge(this.options ? this.options : {}, options || {}).messages)
+    return validateJoiResult(
+      new ValidatorJoi({
+        allowUnknown: true,
+        skipFunctions: true,
+        stripUnknown: false,
+        ...(this.options && this.options.joiOptions ? this.options.joiOptions : {}),
+        abortEarly: false
+      })
+        .validate(object), deepmerge(this.options ? this.options : {}, options || {}).messages)
   }
 
 }
