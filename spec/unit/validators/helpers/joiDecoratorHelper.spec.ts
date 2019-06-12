@@ -22,6 +22,23 @@ describe('JoiDecoratorHelper', () => {
       instance.name = 'nom'
       expect(checkByDecorator(instance)).toEqual(instance)
     })
+
+    it('should validate dto with other properties', () => {
+      // tslint:disable-next-line:max-classes-per-file
+      class DTO {
+        @MaxLength(50)
+        @Required()
+        public name: string
+
+        public other: number
+      }
+
+      const instance: DTO = new DTO()
+      instance.name = 'nom'
+      instance.other = 5
+      expect(checkByDecorator(instance, {allowUnknown: true})).toEqual(instance)
+    })
+
     it('should not validate name with BusinessValidator', async () => {
       // tslint:disable-next-line:max-classes-per-file
       class DTO {
@@ -108,5 +125,6 @@ describe('JoiDecoratorHelper', () => {
         ])
       )
     })
+
   })
 })
