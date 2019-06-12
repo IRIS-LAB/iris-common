@@ -1,5 +1,6 @@
 # 2.0.1
 - [x] Override IrisException message by including all libelleErreur of erreurs
+- [x] Allow unknown fields when validating with joi
 
 # 2.0.0
 - [x] Migrate module to Typescript
