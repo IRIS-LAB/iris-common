@@ -1,13 +1,12 @@
-import { ErreurDO } from '../../../src/do'
-import { IrisException } from '../../../src/exception'
+import { ErrorDO, IrisException } from '../../../../src'
 
 describe('IrisException', () => {
   describe('message', () => {
-    it('should contains all of libelleErreur', async () => {
+    it('should contains all of label', async () => {
       // GIVEN
       const myException = new IrisException([
-        new ErreurDO('field1', 'code.error', 'cause 1 of exception'),
-        new ErreurDO('field2', 'code2.error', 'cause 2 of exception')
+        new ErrorDO('field1', 'code.error', 'cause 1 of exception'),
+        new ErrorDO('field2', 'code2.error', 'cause 2 of exception')
       ])
       // WHEN
       const message = myException.message

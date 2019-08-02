@@ -1,11 +1,13 @@
 import 'reflect-metadata'
 import { Joi } from 'tsdv-joi/core'
-import { BusinessException } from '../../../src/exception'
-import { BusinessValidator, Validator } from '../../../src/validators'
+import { BusinessValidator } from '../../../../src/decorators'
+import { BusinessException } from '../../../../src/objects/exception'
+import { BusinessValidatorService } from '../../../../src/services/business'
+import { TestUtils } from '../../../commons/test.utils'
 
-describe('Validator', () => {
-  describe('validate with base options', () => {
-    it('should validate', async () => {
+describe('BusinessValidatorservice', () => {
+  describe('validate', () => {
+    it('should return errors', async () => {
       class DTO {
         @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
         public name: string
@@ -21,7 +23,7 @@ describe('Validator', () => {
       const dto = new DTO()
       dto.name = 'ceci est un nom trop long'
       dto.count = -1
-      const validatorLBS = new Validator({
+      const validatorLBS = new BusinessValidatorService({
         messages: {
           string: {
             max: 'Field $field must be $limit char max',
@@ -41,23 +43,23 @@ describe('Validator', () => {
       }
       expect(exception).toBeDefined()
       expect(exception).toBeInstanceOf(BusinessException)
-      const businessException = exception as BusinessException
-      expect(businessException.erreurs).toContainEqual({
-        champErreur: 'name',
-        codeErreur: 'string.max',
-        libelleErreur: 'Field name must be 10 char max'
+
+      TestUtils.expectExceptionToContain(exception, {
+        field: 'name',
+        code: 'string.max',
+        label: 'Field name must be 10 char max'
       })
-      expect(businessException.erreurs).toContainEqual({
-        champErreur: 'name',
-        codeErreur: 'string.regex.base',
-        libelleErreur: 'Field name is not well format'
+      TestUtils.expectExceptionToContain(exception, {
+        field: 'name',
+        code: 'string.regex.base',
+        label: 'Field name is not well format'
       })
-      expect(businessException.erreurs).toContainEqual({
-        champErreur: 'count',
-        codeErreur: 'number.greater',
-        libelleErreur: 'Field count must be greater than 0'
+      TestUtils.expectExceptionToContain(exception, {
+        field: 'count',
+        code: 'number.greater',
+        label: 'Field count must be greater than 0'
       })
-      expect(businessException.erreurs).toContainEqual({ champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required' })
+      TestUtils.expectExceptionToContain(exception, { field: 'alias', code: 'any.required', label: '"alias" is required' })
     })
   })
   describe('validate with specifics options passed to validate function', () => {
@@ -77,7 +79,7 @@ describe('Validator', () => {
       const dto = new DTO()
       dto.name = 'ceci est un nom trop long'
       dto.count = -1
-      const validatorLBS = new Validator({
+      const validatorLBS = new BusinessValidatorService({
         messages: {
           string: {
             max: 'Field $field must be $limit char max',
@@ -102,23 +104,22 @@ describe('Validator', () => {
       }
       expect(exception).toBeDefined()
       expect(exception).toBeInstanceOf(BusinessException)
-      const businessException = exception as BusinessException
-      expect(businessException.erreurs).toContainEqual({
-        champErreur: 'name',
-        codeErreur: 'string.max',
-        libelleErreur: 'Field name must be 10 char max'
+      TestUtils.expectExceptionToContain(exception, {
+        field: 'name',
+        code: 'string.max',
+        label: 'Field name must be 10 char max'
       })
-      expect(businessException.erreurs).toContainEqual({
-        champErreur: 'name',
-        codeErreur: 'string.regex.base',
-        libelleErreur: 'Field name is bad formatted'
+      TestUtils.expectExceptionToContain(exception, {
+        field: 'name',
+        code: 'string.regex.base',
+        label: 'Field name is bad formatted'
       })
-      expect(businessException.erreurs).toContainEqual({
-        champErreur: 'count',
-        codeErreur: 'number.greater',
-        libelleErreur: 'Field count must be greater than 0'
+      TestUtils.expectExceptionToContain(exception, {
+        field: 'count',
+        code: 'number.greater',
+        label: 'Field count must be greater than 0'
       })
-      expect(businessException.erreurs).toContainEqual({ champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required' })
+      TestUtils.expectExceptionToContain(exception, { field: 'alias', code: 'any.required', label: '"alias" is required' })
     })
     it('should validate with unknown fields', () => {
       class DTO {
@@ -131,7 +132,7 @@ describe('Validator', () => {
       const dto = new DTO()
       dto.name = 'cool'
       dto.count = -1
-      expect(new Validator().validate(dto)).toEqual({name: 'cool', count: -1})
+      expect(new BusinessValidatorService().validate(dto)).toEqual({ name: 'cool', count: -1 })
     })
   })
 })

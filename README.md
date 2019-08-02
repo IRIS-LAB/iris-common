@@ -39,7 +39,7 @@ Commonly used classes :
 ```js
 import { ErreurDO } from '@u-iris/iris-common'
 
-const error = ErreurDO('champErreur', 'codeErreur', 'libelleErreur')
+const error = ErreurDO('field', 'code', 'label')
 ```
 
 ## Exceptions
@@ -192,9 +192,9 @@ const validator = new Validator({
     }
 })
 validator.validate(dto)
-// Will throw BusinessException with erreurs :
-// { champErreur: 'name', codeErreur: 'string.max', libelleErreur: 'Field name must be 10 char max' } <- libelleErreur overriden by options
-// { champErreur: 'name', codeErreur: 'string.regex.base', libelleErreur: 'Field name is not well format' } <- libelleErreur overriden by options
-// { champErreur: 'count', codeErreur: 'number.greater', libelleErreur: 'Field count must be greater than 0' } <- libelleErreur overriden by options
-// { champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required' } <- libelleErreur not overriden
+errors
+field
+field
+field
+field
 ```

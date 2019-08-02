@@ -1,8 +1,8 @@
-import { ErreurDO } from '../do'
+import { ErrorDO } from '../do'
 import { IrisException } from './IrisException'
 
 export class TechnicalException extends IrisException {
-  constructor(errors: ErreurDO[] | ErreurDO, causedException: Error) {
+  constructor(errors: ErrorDO[] | ErrorDO, causedException: Error) {
     super(errors)
     Object.setPrototypeOf(this, TechnicalException.prototype)
     if (causedException) {
