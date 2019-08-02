@@ -1,6 +1,6 @@
 # iris-common
 
-> Backend and Frontend Utils for Iris
+Backend and Frontend Utils for Iris
 
 See the change log at [link](release-notes.md).
 
@@ -34,12 +34,12 @@ npm i @u-iris/iris-common --save
 
 Commonly used classes :
 
-- ErreurDO: error structure with 3 fields: `champErreur`, `codeErreur`, `libelleErreur`.
+- ErrorDO: error structure with 3 fields: `field`, `code`, `label`.
 
 ```js
-import { ErreurDO } from '@u-iris/iris-common'
+import { ErrorDO } from '@u-iris/iris-common'
 
-const error = ErreurDO('field', 'code', 'label')
+const error = ErrorDO('field', 'code', 'label')
 ```
 
 ## Exceptions
@@ -74,48 +74,14 @@ const securityException = new SecurityException(
 
 ## Validators (with Joi)
 
-### Javascript
-```javascript
-import { check } from '@u-iris/iris-common'
-// Joi shema
-const model = object().keys({
-  name: string().max(50).required()
-})
-// Object to validate
-const instance = { name: 'nom' }
-const aValidInstance = check(model, instance) // can throw BusinessException if instance of not valid
-```
-
-### Typescript
-
-#### Model definition
+### Model definition
 
 You can use _tsdv-joi_ validators :
 
 ```typescript
 import 'reflect-metadata'
-import { Max as MaxLength } from 'tsdv-joi/constraints/string'
-import { Required } from 'tsdv-joi/constraints/any'
-import { checkByDecorator } from '@u-iris/iris-common'
-
-class DTO {
-    @MaxLength(50)
-    @Required()
-    public name: string
-}
-
-// Object to validate
-const instance: DTO = new DTO()
-instance.name = 'nom'
-const aValidInstance = checkByDecorator(instance) // can throw BusinessException if instance of not valid
-```
-
-Or **@BusinessValidator** decorator :
-
-```typescript
-import 'reflect-metadata'
 import { Joi } from 'tsdv-joi/core'
-import { BusinessValidator, checkByDecorator } from '@u-iris/iris-common'
+import { BusinessValidator, BusinessValidatorService } from '@u-iris/iris-common'
 
 class DTO {
     @BusinessValidator(Joi.string().max(50).required())
@@ -125,25 +91,26 @@ class DTO {
 // Object to validate
 const instance: DTO = new DTO()
 instance.name = 'nom'
-const aValidInstance = checkByDecorator(instance) // can throw BusinessException if instance of not valid
+const aValidInstance = new BusinessValidatorService().validate(instance) // can throw BusinessException if instance is not valid
 ```
+### Validator with options
 
-#### Validator with options
-
-Instead of using _checkByDecorator_ function to validate your beans, you can use the **Validator** class and override joi error messages.
-
-Create a new Validator instance
+You can pass joi validator options to override default options of BusinessValidatorService.
 
 ```typescript
-import { Validator } from '@u-iris/iris-common'
-const validator = new Validator()
+import { BusinessValidatorService } from '@u-iris/iris-common'
+const businessValidatorService = new BusinessValidatorService({
+  joiOptions: {
+    convert: true
+  }
+})
 ```
 
 You can override error messages
 
 ```typescript
-import { Validator } from '@u-iris/iris-common'
-const validator = new Validator({
+import { BusinessValidatorService } from '@u-iris/iris-common'
+const businessValidatorService = new BusinessValidatorService({
   messages: {...}
 })
 ```
@@ -192,9 +159,7 @@ const validator = new Validator({
     }
 })
 validator.validate(dto)
-errors
-field
-field
-field
-field
 ```
+
+## Licence
+MIT
