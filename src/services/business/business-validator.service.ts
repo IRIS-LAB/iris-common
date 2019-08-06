@@ -1,5 +1,5 @@
 import deepmerge from 'deepmerge'
-import { Validator  } from 'tsdv-joi'
+import { Validator } from 'tsdv-joi'
 import { ValidationResult } from 'tsdv-joi/ValidationResult'
 import { BusinessValidatorOptions, Messages } from '../../interfaces'
 import { BusinessException, ErrorDO } from '../../objects/exception'
@@ -42,12 +42,16 @@ export class BusinessValidatorService {
    */
   private validateJoiResult<T>(result: ValidationResult<T>, messages?: Messages | null): T {
     if (result.error) {
-      const errors = result.error.details.map(({ message, context, type }) => {
+      const errors = result.error.details.map(({ message, context, type, path }) => {
         if (!context || !context.key) {
           return
         }
         const field = context.key
-        return new ErrorDO(field, type, this.getMessage(field, type, context, message, messages))
+        return new ErrorDO(field, type, this.getMessage(field, type, context, message, messages), {
+          value: context.value,
+          limit: context.limit,
+          path: Array.isArray(path) ? path.join('.') : path
+        })
       }).filter(e => e !== undefined && e !== null) as ErrorDO[]
       throw new BusinessException(errors)
     }

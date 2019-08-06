@@ -47,17 +47,25 @@ describe('BusinessValidatorservice', () => {
       TestUtils.expectExceptionToContain(exception, {
         field: 'name',
         code: 'string.max',
-        label: 'Field name must be 10 char max'
+        label: 'Field name must be 10 char max',
+        limit: 10,
+        path: 'name',
+        value: 'ceci est un nom trop long'
       })
       TestUtils.expectExceptionToContain(exception, {
         field: 'name',
         code: 'string.regex.base',
-        label: 'Field name is not well format'
+        label: 'Field name is not well format',
+        path: 'name',
+        value: 'ceci est un nom trop long'
       })
       TestUtils.expectExceptionToContain(exception, {
         field: 'count',
         code: 'number.greater',
-        label: 'Field count must be greater than 0'
+        label: 'Field count must be greater than 0',
+        limit: 0,
+        path: 'count',
+        value: -1
       })
       TestUtils.expectExceptionToContain(exception, { field: 'alias', code: 'any.required', label: '"alias" is required' })
     })

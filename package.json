@@ -10,9 +10,8 @@
   "scripts": {
     "build": "node_modules/.bin/gulp build",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "test": "jest",
-    "unit": "npm run test:unit",
-    "test:unit": "jest spec/unit"
+    "test": "jest --collect-coverage",
+    "test:unit": "jest spec/unit --collect-coverage"
   },
   "repository": {
     "type": "git",
@@ -56,6 +55,6 @@
     "deepmerge": "^3.2.0",
     "joi": "^14.3.1",
     "reflect-metadata": "^0.1.13",
-    "tsdv-joi": "0.0.12"
+    "tsdv-joi": "=0.0.12"
   }
 }
