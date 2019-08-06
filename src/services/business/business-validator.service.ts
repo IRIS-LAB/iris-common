@@ -50,7 +50,7 @@ export class BusinessValidatorService {
         return new ErrorDO(field, type, this.getMessage(field, type, context, message, messages), {
           value: context.value,
           limit: context.limit,
-          path: Array.isArray(path) ? path.join('.') : path
+          path: (path as unknown) as Array<string|number>
         })
       }).filter(e => e !== undefined && e !== null) as ErrorDO[]
       throw new BusinessException(errors)

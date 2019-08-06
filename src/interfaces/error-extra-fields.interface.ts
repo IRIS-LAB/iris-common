@@ -1,5 +1,5 @@
 export interface ErrorExtraFields {
-  path?: string,
+  path?: Array<string|number>,
   value?: string,
   limit?: number
 }

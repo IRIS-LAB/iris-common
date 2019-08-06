@@ -3,22 +3,22 @@ import { ErrorDO } from '../../../../src'
 describe('ErrorDO', () => {
   describe('constructor', () => {
     it('should create new error with extra fields as data', async () => {
-      expect(new ErrorDO('field', 'code', 'label', { path: 'path', value: 'value', limit: 15 })).toEqual({
+      expect(new ErrorDO('field', 'code', 'label', { path: ['path'], value: 'value', limit: 15 })).toEqual({
         field: 'field',
         code: 'code',
         label: 'label',
-        path: 'path',
+        path: ['path'],
         value: 'value',
         limit: 15
       })
     })
 
     it('should create new error with only path as data object', async () => {
-      expect(new ErrorDO('field', 'code', 'label', { path: 'path' })).toEqual({
+      expect(new ErrorDO('field', 'code', 'label', { path: ['path'] })).toEqual({
         field: 'field',
         code: 'code',
         label: 'label',
-        path: 'path'
+        path: ['path']
       })
     })
 

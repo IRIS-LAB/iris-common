@@ -1,25 +1,109 @@
 import 'reflect-metadata'
+import { Nested, NestedArray } from 'tsdv-joi'
 import { Joi } from 'tsdv-joi/core'
 import { BusinessValidator } from '../../../../src/decorators'
 import { BusinessException } from '../../../../src/objects/exception'
 import { BusinessValidatorService } from '../../../../src/services/business'
 import { TestUtils } from '../../../commons/test.utils'
 
+class Child {
+  @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
+  public name: string
+}
+
+class DTO {
+  @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
+  public name: string
+
+  @BusinessValidator(Joi.number().greater(0))
+  public count: number
+
+  @BusinessValidator(Joi.string().required())
+  public alias: string
+
+  @Nested(Child)
+  public child: Child
+
+  @NestedArray(Child)
+  public children: Child[]
+
+  public unknownField: string
+
+}
+
 describe('BusinessValidatorservice', () => {
   describe('validate', () => {
-    it('should return errors', async () => {
-      class DTO {
-        @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
-        public name: string
+    it('should validate', () => {
+      const dto = new DTO()
+      dto.name = 'cool'
+      dto.alias = 'alias'
+      expect(new BusinessValidatorService().validate(dto)).toBeDefined()
+    })
 
-        @BusinessValidator(Joi.number().greater(0))
-        public count: number
+    it('should return max length error', () => {
+      const dto = new DTO()
+      dto.name = 'this is very too long'
+      dto.alias = 'alias'
+      TestUtils.expectThrowIrisExceptionLike(() => new BusinessValidatorService().validate(dto), BusinessException, {
+        field: 'name',
+        code: 'string.max',
+        limit: 10,
+        path: ['name'],
+        value: 'this is very too long'
+      })
+    })
 
-        @BusinessValidator(Joi.string().required())
-        public alias: string
+    it('should return max length error for child', () => {
+      const dto = new DTO()
+      dto.name = 'ok'
+      dto.alias = 'alias'
+      dto.child = new Child()
+      dto.child.name = 'this is very too long'
 
-      }
+      TestUtils.expectThrowIrisExceptionLike(() => new BusinessValidatorService().validate(dto), BusinessException, {
+        field: 'name',
+        code: 'string.max',
+        limit: 10,
+        path: ['child', 'name'],
+        value: 'this is very too long'
+      })
+    })
 
+    it('should return max length error for children 0', () => {
+      const dto = new DTO()
+      dto.name = 'ok'
+      dto.alias = 'alias'
+      dto.children = [new Child()]
+      dto.children[0].name = 'this is very too long'
+
+      TestUtils.expectThrowIrisExceptionLike(() => new BusinessValidatorService().validate(dto), BusinessException, {
+        field: 'name',
+        code: 'string.max',
+        limit: 10,
+        path: ['children', 0, 'name'],
+        value: 'this is very too long'
+      })
+    })
+    it('should return max length error for children 1', () => {
+      const dto = new DTO()
+      dto.name = 'ok'
+      dto.alias = 'alias'
+      dto.children = [new Child(), new Child()]
+      dto.children[0].name = 'cool'
+
+      dto.children = [new Child(), new Child()]
+      dto.children[1].name = 'this is very too long'
+
+      TestUtils.expectThrowIrisExceptionLike(() => new BusinessValidatorService().validate(dto), BusinessException, {
+        field: 'name',
+        code: 'string.max',
+        limit: 10,
+        path: ['children', 1, 'name'],
+        value: 'this is very too long'
+      })
+    })
+
+    it('should return errors with specific messages', async () => {
       const dto = new DTO()
       dto.name = 'ceci est un nom trop long'
       dto.count = -1
@@ -49,14 +133,14 @@ describe('BusinessValidatorservice', () => {
         code: 'string.max',
         label: 'Field name must be 10 char max',
         limit: 10,
-        path: 'name',
+        path: ['name'],
         value: 'ceci est un nom trop long'
       })
       TestUtils.expectExceptionToContain(exception, {
         field: 'name',
         code: 'string.regex.base',
         label: 'Field name is not well format',
-        path: 'name',
+        path: ['name'],
         value: 'ceci est un nom trop long'
       })
       TestUtils.expectExceptionToContain(exception, {
@@ -64,29 +148,21 @@ describe('BusinessValidatorservice', () => {
         code: 'number.greater',
         label: 'Field count must be greater than 0',
         limit: 0,
-        path: 'count',
+        path: ['count'],
         value: -1
       })
       TestUtils.expectExceptionToContain(exception, { field: 'alias', code: 'any.required', label: '"alias" is required' })
     })
   })
+
   describe('validate with specifics options passed to validate function', () => {
     it('should throw error', async () => {
-      class DTO {
-        @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
-        public name: string
-
-        @BusinessValidator(Joi.number().greater(0))
-        public count: number
-
-        @BusinessValidator(Joi.string().required())
-        public alias: string
-
-      }
-
       const dto = new DTO()
       dto.name = 'ceci est un nom trop long'
       dto.count = -1
+      dto.child = {
+        name: 'ceci est un nom trop long'
+      }
       const validatorLBS = new BusinessValidatorService({
         messages: {
           string: {
@@ -130,17 +206,12 @@ describe('BusinessValidatorservice', () => {
       TestUtils.expectExceptionToContain(exception, { field: 'alias', code: 'any.required', label: '"alias" is required' })
     })
     it('should validate with unknown fields', () => {
-      class DTO {
-        @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
-        public name: string
-
-        public count: number
-      }
-
       const dto = new DTO()
       dto.name = 'cool'
-      dto.count = -1
-      expect(new BusinessValidatorService().validate(dto)).toEqual({ name: 'cool', count: -1 })
+      dto.alias = 'alias'
+      dto.unknownField = 'yes'
+
+      expect(new BusinessValidatorService().validate(dto)).toEqual({ name: 'cool', alias: 'alias', unknownField: 'yes' })
     })
   })
 })
