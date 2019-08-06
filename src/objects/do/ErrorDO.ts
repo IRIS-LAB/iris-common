@@ -1,5 +1,7 @@
+import { ErrorExtraFields } from '../../interfaces'
+
 /**
- * Functional error DO.
+ * Data object for Iris errors.
  */
 export class ErrorDO {
 
@@ -14,7 +16,7 @@ export class ErrorDO {
    * @param label (string) error label
    * @param extraFields (object) error extra fields (path, value, limit)
    */
-  constructor(public readonly field: string, public readonly code: string, public readonly label: string, extraFields?: { path?: string, value?: string, limit?: number }) {
+  constructor(public readonly field: string, public readonly code: string, public readonly label: string, extraFields?: ErrorExtraFields) {
     if (typeof extraFields === 'object') {
       this.path = extraFields.path
       this.value = extraFields.value
