@@ -34,17 +34,26 @@ npm i @u-iris/iris-common --save
 
 Commonly used classes :
 
-- ErrorDO: error structure with 3 fields: `field`, `code`, `label`.
+- ErrorDO: error structure with 3 required fields (`field`, `code`, `label`) and extra fields (value, path, limit)
 
 ```js
 import { ErrorDO } from '@u-iris/iris-common'
 
-const error = ErrorDO('field', 'code', 'label')
+const error = ErrorDO(
+  'field', // the field name 
+  'code', // the error code
+  'label' // the label
+)
+const errorWithExtraFields = ErrorDO('field', 'code', 'label', {
+  value: 'the value', // the value in error as any
+  path: ['child', 'field'], // the path as array of string or number : used to identify full path of field when the error is from a nested object (You can use index of array like ['children', 1, 'field'] which means the field 'field' of the 2nd element (index is from 0) of the array 'children'. 
+  limit: 5 // the limit for a string max / min length or for a number which must be greater / lesser than
+})
 ```
 
 ## Exceptions
 
-Classes for exceptions that all have the property `erreurs`.
+Classes for exceptions that all holds an array of `ErrorDO` in property `errors`.
 
 - BusinessException
 - EntityNotFoundBusinessException
@@ -76,16 +85,33 @@ const securityException = new SecurityException(
 
 ### Model definition
 
-You can use _tsdv-joi_ validators :
+Use `@BusinessValidator()` decorator on a field with a _Joi_ constraint.
+
+To validate a nested field that should be validated itself use `@Nested()` decorator and set the type of your field as a decorator parameter. 
+
+If your field is an array, use `@NestedArray()` and pass the type of your array.
 
 ```typescript
 import 'reflect-metadata'
+import { Nested, NestedArray } from 'tsdv-joi'
 import { Joi } from 'tsdv-joi/core'
 import { BusinessValidator, BusinessValidatorService } from '@u-iris/iris-common'
+
+
+class Child {
+    @BusinessValidator(Joi.string().max(10).required())
+    public name: string
+}
 
 class DTO {
     @BusinessValidator(Joi.string().max(50).required())
     public name: string
+  
+    @Nested(Child)
+    public child: Child
+
+    @NestedArray(Child)
+    public children: Child[]
 }
 
 // Object to validate
@@ -128,7 +154,7 @@ To get a list of exhaustives field types and rule types, please see the [joi doc
 ```typescript
 import 'reflect-metadata'
 import { Joi } from 'tsdv-joi/core'
-import { BusinessValidator, Validator } from '@u-iris/iris-common'
+import { BusinessValidator, BusinessValidatorService } from '@u-iris/iris-common'
 class DTO {
     @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
     public name: string
@@ -141,11 +167,11 @@ class DTO {
 }
 
 const dto = new DTO()
-dto.name = 'ceci est un nom trop long'
+dto.name = 'this is very too long'
 dto.count = -1
 
 // Create a new validator and set new messages
-const validator = new Validator({
+const validator = new BusinessValidatorService({
     messages: {
       // messages format is {'field type' : {'rule type' : 'message'}}
       
