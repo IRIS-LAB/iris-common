@@ -13,7 +13,7 @@ module.exports = {
   transform: {
     "^.+\\.(ts|js)$": "ts-jest"
   },
-  collectCoverage: true,
+  collectCoverage: false, // please enable coverage in command line. When enabled, debug is not working and stacktrace line numbers are wrong
   coverageDirectory: '<rootDir>/coverage',
   collectCoverageFrom: [
     '<rootDir>/src/**/*'

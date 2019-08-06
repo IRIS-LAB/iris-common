@@ -3,16 +3,15 @@
   "version": "2.0.2-0",
   "description": "Common JS module for IRIS",
   "main": "dist/index.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "node_modules/.bin/gulp build",
+    "build": "rm -rf dist/ && tsc -p tsconfig.build.json",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "test": "jest",
-    "unit": "npm run test:unit",
-    "test:unit": "jest spec/unit"
+    "test": "jest --collect-coverage",
+    "test:unit": "jest spec/unit --collect-coverage"
   },
   "repository": {
     "type": "git",
@@ -42,6 +41,7 @@
     "gulp-replace": "^1.0.0",
     "gulp-typescript": "^5.0.1",
     "jest": "^24.8.0",
+    "jest-diff": "^24.8.0",
     "jest-html-reporter": "^2.5.0",
     "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.1",
@@ -53,9 +53,9 @@
     "webpack-stream": "^5.2.1"
   },
   "dependencies": {
-    "deepmerge": "^3.2.0",
+    "deepmerge": "^3.3.0",
     "joi": "^14.3.1",
     "reflect-metadata": "^0.1.13",
-    "tsdv-joi": "0.0.12"
+    "tsdv-joi": "=0.0.12"
   }
 }

@@ -1,6 +1,6 @@
 # iris-common
 
-> Backend and Frontend Utils for Iris
+Backend and Frontend Utils for Iris
 
 See the change log at [link](release-notes.md).
 
@@ -34,17 +34,26 @@ npm i @u-iris/iris-common --save
 
 Commonly used classes :
 
-- ErreurDO: error structure with 3 fields: `champErreur`, `codeErreur`, `libelleErreur`.
+- ErrorDO: error structure with 3 required fields (`field`, `code`, `label`) and extra fields (value, path, limit)
 
 ```js
-import { ErreurDO } from '@u-iris/iris-common'
+import { ErrorDO } from '@u-iris/iris-common'
 
-const error = ErreurDO('champErreur', 'codeErreur', 'libelleErreur')
+const error = ErrorDO(
+  'field', // the field name 
+  'code', // the error code
+  'label' // the label
+)
+const errorWithExtraFields = ErrorDO('field', 'code', 'label', {
+  value: 'the value', // the value in error as any
+  path: ['child', 'field'], // the path as array of string or number : used to identify full path of field when the error is from a nested object (You can use index of array like ['children', 1, 'field'] which means the field 'field' of the 2nd element (index is from 0) of the array 'children'. 
+  limit: 5 // the limit for a string max / min length or for a number which must be greater / lesser than
+})
 ```
 
 ## Exceptions
 
-Classes for exceptions that all have the property `erreurs`.
+Classes for exceptions that all holds an array of `ErrorDO` in property `errors`.
 
 - BusinessException
 - EntityNotFoundBusinessException
@@ -74,76 +83,60 @@ const securityException = new SecurityException(
 
 ## Validators (with Joi)
 
-### Javascript
-```javascript
-import { check } from '@u-iris/iris-common'
-// Joi shema
-const model = object().keys({
-  name: string().max(50).required()
-})
-// Object to validate
-const instance = { name: 'nom' }
-const aValidInstance = check(model, instance) // can throw BusinessException if instance of not valid
-```
+### Model definition
 
-### Typescript
+Use `@BusinessValidator()` decorator on a field with a _Joi_ constraint.
 
-#### Model definition
+To validate a nested field that should be validated itself use `@Nested()` decorator and set the type of your field as a decorator parameter. 
 
-You can use _tsdv-joi_ validators :
+If your field is an array, use `@NestedArray()` and pass the type of your array.
 
 ```typescript
 import 'reflect-metadata'
-import { Max as MaxLength } from 'tsdv-joi/constraints/string'
-import { Required } from 'tsdv-joi/constraints/any'
-import { checkByDecorator } from '@u-iris/iris-common'
+import { Nested, NestedArray } from 'tsdv-joi'
+import { Joi } from 'tsdv-joi/core'
+import { BusinessValidator, BusinessValidatorService } from '@u-iris/iris-common'
 
-class DTO {
-    @MaxLength(50)
-    @Required()
+
+class Child {
+    @BusinessValidator(Joi.string().max(10).required())
     public name: string
 }
-
-// Object to validate
-const instance: DTO = new DTO()
-instance.name = 'nom'
-const aValidInstance = checkByDecorator(instance) // can throw BusinessException if instance of not valid
-```
-
-Or **@BusinessValidator** decorator :
-
-```typescript
-import 'reflect-metadata'
-import { Joi } from 'tsdv-joi/core'
-import { BusinessValidator, checkByDecorator } from '@u-iris/iris-common'
 
 class DTO {
     @BusinessValidator(Joi.string().max(50).required())
     public name: string
+  
+    @Nested(Child)
+    public child: Child
+
+    @NestedArray(Child)
+    public children: Child[]
 }
 
 // Object to validate
 const instance: DTO = new DTO()
 instance.name = 'nom'
-const aValidInstance = checkByDecorator(instance) // can throw BusinessException if instance of not valid
+const aValidInstance = new BusinessValidatorService().validate(instance) // can throw BusinessException if instance is not valid
 ```
+### Validator with options
 
-#### Validator with options
-
-Instead of using _checkByDecorator_ function to validate your beans, you can use the **Validator** class and override joi error messages.
-
-Create a new Validator instance
+You can pass joi validator options to override default options of BusinessValidatorService.
 
 ```typescript
-import { Validator } from '@u-iris/iris-common'
-const validator = new Validator()
+import { BusinessValidatorService } from '@u-iris/iris-common'
+const businessValidatorService = new BusinessValidatorService({
+  joiOptions: {
+    convert: true
+  }
+})
 ```
 
 You can override error messages
 
 ```typescript
-import { Validator } from '@u-iris/iris-common'
-const validator = new Validator({
+import { BusinessValidatorService } from '@u-iris/iris-common'
+const businessValidatorService = new BusinessValidatorService({
   messages: {...}
 })
 ```
@@ -161,7 +154,7 @@ To get a list of exhaustives field types and rule types, please see the [joi doc
 ```typescript
 import 'reflect-metadata'
 import { Joi } from 'tsdv-joi/core'
-import { BusinessValidator, Validator } from '@u-iris/iris-common'
+import { BusinessValidator, BusinessValidatorService } from '@u-iris/iris-common'
 class DTO {
     @BusinessValidator(Joi.string().max(10).regex(/^([A-Za-z0-9]*)$/).required())
     public name: string
@@ -174,11 +167,11 @@ class DTO {
 }
 
 const dto = new DTO()
-dto.name = 'ceci est un nom trop long'
+dto.name = 'this is very too long'
 dto.count = -1
 
 // Create a new validator and set new messages
-const validator = new Validator({
+const validator = new BusinessValidatorService({
     messages: {
       // messages format is {'field type' : {'rule type' : 'message'}}
       
@@ -192,9 +185,7 @@ const validator = new Validator({
     }
 })
 validator.validate(dto)
-// Will throw BusinessException with erreurs :
-// { champErreur: 'name', codeErreur: 'string.max', libelleErreur: 'Field name must be 10 char max' } <- libelleErreur overriden by options
-// { champErreur: 'name', codeErreur: 'string.regex.base', libelleErreur: 'Field name is not well format' } <- libelleErreur overriden by options
-// { champErreur: 'count', codeErreur: 'number.greater', libelleErreur: 'Field count must be greater than 0' } <- libelleErreur overriden by options
-// { champErreur: 'alias', codeErreur: 'any.required', libelleErreur: '"alias" is required' } <- libelleErreur not overriden
 ```
+
+## Licence
+MIT
