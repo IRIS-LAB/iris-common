@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "node_modules/.bin/gulp build",
+    "build": "rm -rf dist/ && tsc -p tsconfig.build.json",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "jest --collect-coverage",
     "test:unit": "jest spec/unit --collect-coverage"
@@ -52,7 +52,7 @@
     "webpack-stream": "^5.2.1"
   },
   "dependencies": {
-    "deepmerge": "^3.2.0",
+    "deepmerge": "^3.3.0",
     "joi": "^14.3.1",
     "reflect-metadata": "^0.1.13",
     "tsdv-joi": "=0.0.12"
