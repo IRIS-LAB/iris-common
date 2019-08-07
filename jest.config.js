@@ -34,7 +34,8 @@ module.exports = {
   coverageReporters: [
     'text',
     'html',
-    'cobertura'
+    'cobertura',
+    'lcov'
   ],
   globals: {
     "ts-jest": {
