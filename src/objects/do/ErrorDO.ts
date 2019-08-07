@@ -5,9 +5,9 @@ import { ErrorExtraFields } from '../../interfaces'
  */
 export class ErrorDO {
 
-  public readonly path?: Array<string|number>
-  public readonly value?: string | null
-  public readonly limit?: number
+  public readonly path?: ErrorExtraFields['path']
+  public readonly value?: ErrorExtraFields['value']
+  public readonly limit?: ErrorExtraFields['limit']
 
   /**
    * Constructor
