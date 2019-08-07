@@ -1,3 +1,6 @@
+# 3.0.1
+- [x] move dependencies (joi, @types/joi, deepmerge, reflect-metadata, tsdv-joi) to peerDependencies
+
 # 3.0.0
 - [x] IrisException : Rename erreurs -> errors
 - [x] Rename ErreurDO -> ErrorDO and rename fields libelleErreur -> label, codeErreur -> code, champErreur -> field
