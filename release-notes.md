@@ -1,3 +1,9 @@
+# 3.0.0
+- [x] IrisException : Rename erreurs -> errors
+- [x] Rename ErreurDO -> ErrorDO and rename fields libelleErreur -> label, codeErreur -> code, champErreur -> field
+- [x] ErrorDO : Add extra fields path, value and limit
+- [x] Remove Joi validation without @BusinessValidator() decorator
+
 # 2.0.1
 - [x] Override IrisException message by including all libelleErreur of erreurs
 - [x] Allow unknown fields when validating with joi
