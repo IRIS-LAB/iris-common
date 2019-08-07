@@ -1,5 +1,8 @@
 import { ErrorDO } from '../do'
 
+/**
+ * Super class for IRIS.
+ */
 export class IrisException extends Error {
   public errors: ErrorDO[]
 
