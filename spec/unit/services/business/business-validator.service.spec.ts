@@ -24,6 +24,7 @@ class DTO {
   @Nested(Child)
   public child: Child
 
+  @BusinessValidator(Joi.array().max(5))
   @NestedArray(Child)
   public children: Child[]
 
