@@ -1,3 +1,6 @@
+# 3.0.2
+- [x] fix : @BusinessValidator now merge existing schema with new.
+
 # 3.0.1
 - [x] move dependencies (joi, @types/joi, deepmerge, reflect-metadata, tsdv-joi) to peerDependencies
 
