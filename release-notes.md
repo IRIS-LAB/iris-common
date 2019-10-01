@@ -1,3 +1,6 @@
+# 3.1.0
+- [x] remove validator and dependencies joi, @types/joi, deepmerge, tsdv-joi (moved to iris-back)
+
 # 3.0.2
 - [x] fix : @BusinessValidator now merge existing schema with new.
 

@@ -1,6 +1,6 @@
 {
   "name": "@u-iris/iris-common",
-  "version": "3.0.3-0",
+  "version": "3.1.0-0",
   "description": "Common JS module for IRIS",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -25,25 +25,17 @@
   "homepage": "https://github.com/IRIS-LAB/iris-common#readme",
   "devDependencies": {
     "@types/jest": "^24.0.13",
-    "@types/joi": "=10.4.2",
     "@types/node": "^12.0.2",
-    "deepmerge": "^3.3.0",
     "jest": "^24.8.0",
     "jest-diff": "^24.8.0",
     "jest-html-reporter": "^2.5.0",
-    "joi": "^14.3.1",
     "reflect-metadata": "^0.1.13",
     "ts-jest": "^24.0.2",
-    "tsdv-joi": "0.0.12",
     "tslint": "^5.16.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.3"
   },
   "peerDependencies": {
-    "@types/joi": "^10.4.2",
-    "joi": "^14.3.1",
-    "deepmerge": "^3.3.0",
-    "reflect-metadata": "^0.1.13",
-    "tsdv-joi": "=0.0.12"
+    "reflect-metadata": "^0.1.13"
   }
 }
