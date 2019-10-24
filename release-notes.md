@@ -1,3 +1,6 @@
+# 3.1.1
+- [x] add static methods to IrisException and children to check is an object is an instance of the exception type
+
 # 3.1.0
 - [x] remove validator and dependencies joi, @types/joi, deepmerge, tsdv-joi (moved to iris-back)
 
