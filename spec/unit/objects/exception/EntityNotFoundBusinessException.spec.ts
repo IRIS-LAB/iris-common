@@ -1,4 +1,4 @@
-import { EntityNotFoundBusinessException, ErrorDO } from '../../../../dist'
+import { BusinessException, EntityNotFoundBusinessException, ErrorDO, IrisException } from '../../../../src'
 
 describe('EntityNotFoundBusinessException', () => {
   describe('prototype', () => {
@@ -22,6 +22,16 @@ describe('EntityNotFoundBusinessException', () => {
         const eType = EntityNotFoundBusinessException
         const actual = e instanceof eType
         expect(actual).toBeTruthy()
+      }
+    })
+  })
+  describe('isA', () => {
+    it('should return true', () => {
+      try {
+        const error = new ErrorDO('champErreur', 'code.error', 'label error')
+        throw  new EntityNotFoundBusinessException([error])
+      } catch (e) {
+        expect(EntityNotFoundBusinessException.isA(e)).toBeTruthy()
       }
     })
   })
