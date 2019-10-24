@@ -7,7 +7,17 @@ import { IrisException } from './IrisException'
 export class TechnicalException extends IrisException {
   constructor(errors: ErrorDO[] | ErrorDO, causedException: Error) {
     super(errors)
-    Object.setPrototypeOf(this, TechnicalException.prototype)
+
+    // restore prototype chain
+    const actualProto = new.target.prototype
+
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(this, actualProto)
+    } else {
+      // @ts-ignore
+      this.__proto__ = actualProto
+    }
+
     if (causedException) {
       this.stack += `\nCaused by : ${causedException.stack}`
     }

@@ -8,6 +8,15 @@ export class EntityNotFoundBusinessException extends BusinessException {
 
   constructor(errors: ErrorDO[] | ErrorDO) {
     super(errors)
-    Object.setPrototypeOf(this, EntityNotFoundBusinessException.prototype)
+
+    // restore prototype chain
+    const actualProto = new.target.prototype
+
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(this, actualProto)
+    } else {
+      // @ts-ignore
+      this.__proto__ = actualProto
+    }
   }
 }
